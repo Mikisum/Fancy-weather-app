@@ -1,3 +1,43 @@
+var swiper;
+window.onload = function () {
+  swiper = new Swiper('.swiper-container', {
+      slidesPerView: 1,
+      spaceBetween: 10,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 40,
+        },
+      }
+    })
+  };
+
+let input = document.getElementById('input');
+input.focus();
+
+// search.addEventListener('keypress', function(element) => {
+//   if element
+// })
+// window.onload = function () {
+
+// }
+
 let clear = document.getElementById('clear');
 let form = document.getElementById('form');
 clear.addEventListener('click', () => {
@@ -34,6 +74,16 @@ function getMovies(page, word) {
         });
       });    
 }
+
+// function getRating(id) {
+//   const url = `https://www.omdbapi.com/?i=${id}&apikey=${key}`;
+  
+//   return fetch(url)
+//       .then(res => res.json())
+//       .then(data => {
+//        console.log(data.imdbRating);
+//       });
+// }
 
 getMovies(1, 'home');
 // getMovies(2, 'home');
@@ -85,4 +135,5 @@ class Movie {
     return this.htmlCard;
   }
 };
+
 
