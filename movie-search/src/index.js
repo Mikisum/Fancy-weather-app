@@ -1,35 +1,9 @@
-var swiper;
-window.onload = function () {
-  swiper = new Swiper('.swiper-container', {
-      slidesPerView: 1,
-      spaceBetween: 10,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      breakpoints: {
-        640: {
-          slidesPerView: 2,
-          spaceBetween: 20,
-        },
-        768: {
-          slidesPerView: 3,
-          spaceBetween: 30,
-        },
-        1024: {
-          slidesPerView: 4,
-          spaceBetween: 40,
-        },
-      }
-    })
-  };
+import swiper from './swiper.js';
+import "./style.css";
 
-let input = document.getElementById('input');
-input.focus();
+
+
+
 
 // search.addEventListener('keypress', function(element) => {
 //   if element
@@ -37,57 +11,65 @@ input.focus();
 // window.onload = function () {
 
 // }
-
-let clear = document.getElementById('clear');
-let form = document.getElementById('form');
+const input = document.getElementById('input');
+const clear = document.getElementById('clear');
+const form = document.getElementById('form');
 clear.addEventListener('click', () => {
     form.reset();
     input.focus();
 });
 
-let buttonSearch = document.getElementById('search');
-document.addEventListener('click', (event) => {
+input.focus();
+
+const key = 'edb21aab';
+// var movieCards = [];
+let page = 1;
+let word = 'home';
+
+function getMovies() {
+  const url = `https://www.omdbapi.com/?s=${word}&page=${page}&apikey=${key}`;
+  return fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      data.Search.forEach(element => {
+        const movieCard = new Movie(element);
+        // movieCards.push(movieCard);
+        swiper.appendSlide(movieCard.getHtmlCard());
+      });
+    });
+}
+const translateKey = 'trnsl.1.1.20200507T084819Z.f390e50612a690db.7c1617d6408fa233a30cc9ef9d5f1a43827ff027';
+
+function getTranslate(input) {
+  const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${translateKey}&text=${input}&lang=ru-en`;
+  return fetch(url)
+    .then(res => res.json());
+}
+
+document.addEventListener('click', function(event) {
   if (event.target.closest('#search')) {
-    getMovies(1, input.value);
+    swiper.removeAllSlides();
+    page = 1;
+    getTranslate(input.value)
+      .then(data => {
+        word = data.text;
+        getMovies();
+      });
   }
 }); 
 
-const key = 'edb21aab';
+swiper.on('slideChange', function() {
+  if (!swiper.slides.length)
+    return;
 
-// const sliderContainer = document.getElementById('sliderContainer');
-let movieCards = [];
-
-function getMovies(page, word) {
-    const url = `https://www.omdbapi.com/?s=${word}&page=${page}&apikey=${key}`;
-   
-    return fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        if (data.Search.length > 0){
-          swiper.removeAllSlides();
-        }
-        data.Search.forEach(element => {
-          const movieCard = new Movie(element);
-          movieCards.push(movieCard);
-          swiper.appendSlide(movieCard.getHtmlCard());
-          // sliderContainer.append(movieCard.getHtmlCard());
-        });
-      });    
-}
-
-// function getRating(id) {
-//   const url = `https://www.omdbapi.com/?i=${id}&apikey=${key}`;
-  
-//   return fetch(url)
-//       .then(res => res.json())
-//       .then(data => {
-//        console.log(data.imdbRating);
-//       });
-// }
+  if (swiper.activeIndex >= swiper.slides.length - swiper.params.slidesPerView - 2) {
+    page += 1;
+    getMovies();
+  }
+});
 
 getMovies(1, 'home');
-// getMovies(2, 'home');
-// getMovies(3, 'home');
+//https://www.imdb.com/title/tt1375666/videogallery/
 
 class Movie {
   constructor({Title, Year, imdbID, Poster, Type}) {
@@ -134,6 +116,6 @@ class Movie {
   {
     return this.htmlCard;
   }
-};
+}
 
 
