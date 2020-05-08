@@ -5,15 +5,15 @@ import "./style.css";
 
 
 
-// search.addEventListener('keypress', function(element) => {
-//   if element
-// })
+
+
 // window.onload = function () {
 
 // }
 const input = document.getElementById('input');
 const clear = document.getElementById('clear');
 const form = document.getElementById('form');
+const searchButton = document.getElementById('search');
 clear.addEventListener('click', () => {
     form.reset();
     input.focus();
@@ -25,6 +25,14 @@ const key = 'edb21aab';
 // var movieCards = [];
 let page = 1;
 let word = 'home';
+
+let loadIcon = document.createElement('span');
+function createLoadIcon() {
+  loadIcon.className = 'spinner-border spinner-border-sm';
+  loadIcon.setAttribute('role', 'status');
+  loadIcon.setAttribute('aria-hidden', 'true');
+  searchButton.append(loadIcon);
+}
 
 function getMovies() {
   const url = `https://www.omdbapi.com/?s=${word}&page=${page}&apikey=${key}`;
@@ -46,17 +54,25 @@ function getTranslate(input) {
     .then(res => res.json());
 }
 
-document.addEventListener('click', function(event) {
-  if (event.target.closest('#search')) {
-    swiper.removeAllSlides();
-    page = 1;
-    getTranslate(input.value)
-      .then(data => {
-        word = data.text;
-        getMovies();
-      });
-  }
+function searchMovies() {
+  swiper.removeAllSlides();
+  page = 1;
+  getTranslate(input.value)
+    .then(data => {
+      word = data.text;
+      getMovies()
+        .then(loadIcon.remove());
+    });
+}
+searchButton.addEventListener('click', function(event) {
+  createLoadIcon();
+  searchMovies();
 }); 
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault(); 
+  searchMovies();
+});
 
 swiper.on('slideChange', function() {
   if (!swiper.slides.length)
@@ -69,7 +85,6 @@ swiper.on('slideChange', function() {
 });
 
 getMovies(1, 'home');
-//https://www.imdb.com/title/tt1375666/videogallery/
 
 class Movie {
   constructor({Title, Year, imdbID, Poster, Type}) {
@@ -91,7 +106,7 @@ class Movie {
     this.htmlCard.append(cardBody);
 
     const title = document.createElement('a');
-    title.setAttribute('href', Title);
+    title.setAttribute('href', `https://www.imdb.com/title/${imdbID}/videogallery`);
     title.innerText = Title;
     cardBody.append(title);
 
