@@ -1,3 +1,5 @@
+const key = 'edb21aab';
+
 class MovieCard {
     constructor({Title, Year, imdbID, Poster, Type}) {
       this.title = Title;
@@ -44,4 +46,4 @@ class MovieCard {
     }
   }
 
-  export default MovieCard;
+  export { MovieCard, key };

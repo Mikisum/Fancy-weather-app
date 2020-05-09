@@ -1,6 +1,6 @@
 import swiper from './swiper.js';
 import "./style.css";
-import MovieCard from "./MovieCard.js";
+import { MovieCard, key } from "./MovieCard.js";
 
 const input = document.getElementById('input');
 const clear = document.getElementById('clear');
@@ -15,7 +15,6 @@ clear.addEventListener('click', () => {
 
 input.focus();
 
-const key = 'edb21aab';
 let page = 1;
 let word = 'home';
 
@@ -30,38 +29,42 @@ function createLoadIcon() {
 function getMovies() {
   const url = `https://www.omdbapi.com/?s=${word}&page=${page}&apikey=${key}`;
   return fetch(url)
-    // .catch(error => notice.innerText = error.message)
     .then(res => res.json())
     .then(data => {
+      if (!data.Search) {
+        throw {message : `No results for ${input.value}`};
+      }
+      notice.innerText = `Showing ${data.totalResults} results for ${input.value}`;
       data.Search.forEach(element => {
         const movieCard = new MovieCard(element);
         swiper.appendSlide(movieCard.getHtmlCard());
       });
     })
-    // .catch(notice.innerText = `No resultts for ${word}`);
+    .catch(error => notice.innerText = error.message);
 }
 const translateKey = 'trnsl.1.1.20200507T084819Z.f390e50612a690db.7c1617d6408fa233a30cc9ef9d5f1a43827ff027';
 
 function getTranslate(input) {
   const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${translateKey}&text=${input}&lang=ru-en`;
   return fetch(url)
-
-    .then(res => res.json())
-    .catch(notice.innerText = `No resultts for ${input.value}`);
+    .then(res => res.json());
 }
 
 function searchMovies() {
   swiper.removeAllSlides();
   page = 1;
-  getTranslate(input.value)
+  let searchWord = input.value;
+  if (!searchWord) {
+    searchWord = 'home';
+  }
+
+  getTranslate(searchWord)
     .then(data => {
-      word = data.text;
-      input.value = word;
-      notice.innerText = `Showing result for ${word}`; 
+      word = data.text; 
       getMovies()
-        .then(loadIcon.remove())
+        .then(loadIcon.remove());
     })
-    .catch(notice.innerText = `No resultts for ${input.value}`);
+    .catch(error => notice.innerText = `No results for ${searchWord}`);
     
 }
 searchButton.addEventListener('click', function(event) {
