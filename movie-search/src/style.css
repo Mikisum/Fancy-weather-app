@@ -37,7 +37,15 @@ footer, header {
   color: #aaa;
 }
 
-.fa-times {
+.tools {
+  position: absolute;
+  top: 0%;
+  right: 4%;
+  width: 2.375rem;
+  height: 2.375rem;
+  color:#aaa;
+}
+/* .fa-times {
   position: absolute;
   right: 6%;
   color: #aaa;
@@ -47,9 +55,26 @@ footer, header {
   position: absolute;
   top: 2%;
   right: 2%;
-}
+} */
 
 .btn {
     background-color: #3f3f3f !important;
     color: white !important;
+}
+a {
+  line-height: 1.25rem;
+  display: -webkit-box;
+  height: 4rem;
+  color: #3f3f3f;
+}
+
+.fa-star {
+  color: rgb(255, 168, 6);
+}
+
+.keyboard {
+  display: block;
+  position: fixed;
+  z-index: 1000;
+  top: 25%;
 }
