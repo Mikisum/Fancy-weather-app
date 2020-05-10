@@ -20,7 +20,7 @@ input.focus();
 let page = 1;
 let word = 'home';
 
-let loadIcon = document.createElement('span');
+const loadIcon = document.createElement('span');
 function createLoadIcon() {
   loadIcon.className = 'spinner-border spinner-border-sm';
   loadIcon.setAttribute('role', 'status');
@@ -60,13 +60,13 @@ function searchMovies() {
     searchWord = 'home';
   }
 
-  getTranslate(searchWord)
-    .then(data => {
-      word = data.text; 
-      getMovies()
-        .then(loadIcon.remove());
-    })
-    .catch(error => notice.innerText = `No results for ${searchWord}`);
+getTranslate(searchWord)
+  .then(data => {
+    word = data.text; 
+    getMovies()
+      .then(loadIcon.remove());
+  })
+  .catch(error => notice.innerText = `No results for ${searchWord}`);
     
 }
 
@@ -97,8 +97,13 @@ function removeKeyboard() {
 
 const iconKeyboard = document.getElementById('iconKeyboard');
 iconKeyboard.addEventListener('click', (event) => {
-  createKeyboard();
-})
+  if (keyboardContainer.firstChild) {
+    removeKeyboard();
+  }
+   else {
+     createKeyboard();
+   }
+});
 
 swiper.on('slideChange', function() {
   if (!swiper.slides.length) return;
