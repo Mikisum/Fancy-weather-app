@@ -45,22 +45,12 @@ footer, header {
   height: 2.375rem;
   color:#aaa;
 }
-/* .fa-times {
-  position: absolute;
-  right: 6%;
-  color: #aaa;
-}
-
-.fa-keyboard {
-  position: absolute;
-  top: 2%;
-  right: 2%;
-} */
 
 .btn {
     background-color: #3f3f3f !important;
     color: white !important;
 }
+
 a {
   line-height: 1.25rem;
   display: -webkit-box;
@@ -77,4 +67,14 @@ a {
   position: fixed;
   z-index: 1000;
   top: 25%;
+}
+
+.contact{
+  color: white;
+  margin: 0;
+  max-height: 42px;
+}
+
+.contact:hover {
+  color: #a19999;
 }
