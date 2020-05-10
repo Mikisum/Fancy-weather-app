@@ -47,16 +47,16 @@ class MovieCard {
     ratingContainer.append(this.htmlRating);
   }
   
-    async fetchRating(id) {
-      const url = `https://www.omdbapi.com/?i=${id}&apikey=${key}`;
-      const res = await fetch(url);
-      const data = await res.json();
-      this.htmlRating.innerText = data.imdbRating;
-    }
-  
-    getHtmlCard() {
-      return this.htmlCard;
-    }
+  fetchRating(id) {
+    const url = `https://www.omdbapi.com/?i=${id}&apikey=${key}`;
+    return fetch(url)
+      .then(res => res.json())
+      .then(data => this.htmlRating.innerText = data.imdbRating);
   }
+  
+  getHtmlCard() {
+    return this.htmlCard;
+  }
+}
 
-  export { MovieCard, key };
+export { MovieCard, key };
