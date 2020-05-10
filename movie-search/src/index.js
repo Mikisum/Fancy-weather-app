@@ -1,6 +1,8 @@
 import swiper from './swiper.js';
 import "./style.css";
 import { MovieCard, key } from "./MovieCard.js";
+import Keyboard from './keyboard.js';
+import './keyboard.css';
 
 const input = document.getElementById('input');
 const clear = document.getElementById('clear');
@@ -67,20 +69,39 @@ function searchMovies() {
     .catch(error => notice.innerText = `No results for ${searchWord}`);
     
 }
-searchButton.addEventListener('click', function(event) {
+
+function submit(event) {
+  if (event) {
+    event.preventDefault(); 
+  }
+  removeKeyboard();
   createLoadIcon();
   searchMovies();
-}); 
+}
 
-form.addEventListener('submit', (event) => {
-  event.preventDefault(); 
-  searchMovies();
-});
+searchButton.addEventListener('click', submit); 
+form.addEventListener('submit', submit);
+
+const keyboardContainer = document.getElementById('keyboardContainer');
+let keyboard = new Keyboard(input);
+keyboard.enter = submit;
+function createKeyboard() {
+  keyboardContainer.append(keyboard.getHtmlElement());
+}
+
+function removeKeyboard() {
+  while (keyboardContainer.firstChild) {
+    keyboardContainer.removeChild(keyboardContainer.lastChild);
+  }
+}
+
+const iconKeyboard = document.getElementById('iconKeyboard');
+iconKeyboard.addEventListener('click', (event) => {
+  createKeyboard();
+})
 
 swiper.on('slideChange', function() {
-  if (!swiper.slides.length)
-    return;
-
+  if (!swiper.slides.length) return;
   if (swiper.activeIndex >= swiper.slides.length - swiper.params.slidesPerView - 2) {
     page += 1;
     getMovies();
