@@ -16,22 +16,35 @@ class MovieCard {
       this.htmlCard.append(poster);
   
       const cardBody = document.createElement('div');
-      cardBody.className = 'card-body';
+      cardBody.className = 'card-body w-100';
       this.htmlCard.append(cardBody);
   
       const title = document.createElement('a');
+      title.className = 'nav-link';
       title.setAttribute('href', `https://www.imdb.com/title/${imdbID}/videogallery`);
       title.innerText = Title;
       cardBody.append(title);
   
+      const infoContainer = document.createElement('div');
+      infoContainer.className = 'd-flex justify-content-between';
+      cardBody.append(infoContainer);
+
       const year = document.createElement('p');
       year.className = 'card-text';
       year.innerText = Year;
-      cardBody.append(year);
+      infoContainer.append(year);
+
+      const ratingContainer = document.createElement('div');
+      ratingContainer.className = 'd-inline-flex';
+      infoContainer.append(ratingContainer);
   
+      const starIcon = document.createElement('i');
+      starIcon.className = 'fas fa-star pr-1';
+      ratingContainer.append(starIcon);
+
       this.htmlRating = document.createElement('p');
       this.htmlRating.className = 'card-text';
-      cardBody.append(this.htmlRating);
+      ratingContainer.append(this.htmlRating);
     }
   
     async fetchRating(id) {
