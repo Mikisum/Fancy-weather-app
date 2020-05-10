@@ -1,51 +1,51 @@
 const key = 'edb21aab';
 
 class MovieCard {
-    constructor({Title, Year, imdbID, Poster, Type}) {
-      this.title = Title;
-      this.year = Year;
-      this.poster = Poster;
-      this.fetchRating(imdbID);
-  
-      this.htmlCard = document.createElement('div');
-      this.htmlCard.className = 'swiper-slide card';
-      
-      const poster = document.createElement('img');
-      poster.className = 'card-img-top';
-      poster.setAttribute('src', Poster);
-      this.htmlCard.append(poster);
-  
-      const cardBody = document.createElement('div');
-      cardBody.className = 'card-body w-100';
-      this.htmlCard.append(cardBody);
-  
-      const title = document.createElement('a');
-      title.className = 'nav-link';
-      title.setAttribute('href', `https://www.imdb.com/title/${imdbID}/videogallery`);
-      title.innerText = Title;
-      cardBody.append(title);
-  
-      const infoContainer = document.createElement('div');
-      infoContainer.className = 'd-flex justify-content-between';
-      cardBody.append(infoContainer);
+  constructor({Title, Year, imdbID, Poster}) {
+    this.title = Title;
+    this.year = Year;
+    this.poster = Poster;
+    this.fetchRating(imdbID);
 
-      const year = document.createElement('p');
-      year.className = 'card-text';
-      year.innerText = Year;
-      infoContainer.append(year);
+    this.htmlCard = document.createElement('div');
+    this.htmlCard.className = 'swiper-slide card';
+    
+    const poster = document.createElement('img');
+    poster.className = 'card-img-top';
+    poster.setAttribute('src', Poster);
+    this.htmlCard.append(poster);
 
-      const ratingContainer = document.createElement('div');
-      ratingContainer.className = 'd-inline-flex';
-      infoContainer.append(ratingContainer);
-  
-      const starIcon = document.createElement('i');
-      starIcon.className = 'fas fa-star pr-1';
-      ratingContainer.append(starIcon);
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body w-100';
+    this.htmlCard.append(cardBody);
 
-      this.htmlRating = document.createElement('p');
-      this.htmlRating.className = 'card-text';
-      ratingContainer.append(this.htmlRating);
-    }
+    const title = document.createElement('a');
+    title.className = 'nav-link';
+    title.setAttribute('href', `https://www.imdb.com/title/${imdbID}/videogallery`);
+    title.innerText = Title;
+    cardBody.append(title);
+
+    const infoContainer = document.createElement('div');
+    infoContainer.className = 'd-flex justify-content-between';
+    cardBody.append(infoContainer);
+
+    const year = document.createElement('p');
+    year.className = 'card-text';
+    year.innerText = Year;
+    infoContainer.append(year);
+
+    const ratingContainer = document.createElement('div');
+    ratingContainer.className = 'd-inline-flex';
+    infoContainer.append(ratingContainer);
+
+    const starIcon = document.createElement('i');
+    starIcon.className = 'fas fa-star pr-1';
+    ratingContainer.append(starIcon);
+
+    this.htmlRating = document.createElement('p');
+    this.htmlRating.className = 'card-text';
+    ratingContainer.append(this.htmlRating);
+  }
   
     async fetchRating(id) {
       const url = `https://www.omdbapi.com/?i=${id}&apikey=${key}`;

@@ -66,8 +66,7 @@ getTranslate(searchWord)
     getMovies()
       .then(loadIcon.remove());
   })
-  .catch(error => notice.innerText = `No results for ${searchWord}`);
-    
+  .catch(() => notice.innerText = `No results for ${searchWord}`); 
 }
 
 function submit(event) {
@@ -96,7 +95,7 @@ function removeKeyboard() {
 }
 
 const iconKeyboard = document.getElementById('iconKeyboard');
-iconKeyboard.addEventListener('click', (event) => {
+iconKeyboard.addEventListener('click', () => {
   if (keyboardContainer.firstChild) {
     removeKeyboard();
   }
