@@ -65,6 +65,7 @@ const KEY_CODES = {
   ShiftRight: 'ShiftRight',
   ControlLeft: 'ControlLeft',
   AltLeft: 'AltLeft',
+  SetLang: 'SetLang',
   Space: 'Space',
   AltRight: 'AltRight',
   ArrowLeft: 'ArrowLeft',
@@ -93,25 +94,17 @@ class Keyboard {
     return HINT;
   }
   constructor (input) {
-    // this.textArea = this.createtextArea();
     this.textArea = input;
     this.keyboard = this.createKeyboard();
-    // this.HINT = this.createHint();
-
-    // htmlParent.append(this.keyboard);
-    // htmlParent.append(this.HINT);
-
     this.language = sessionStorage.getItem('language') != null ? sessionStorage.getItem('language') : LANGUAGES.en;
     this.letterCase = letterCases.lower;
     this.altPressed = false;
     this.shiftPressed = false;
-
     this.createKeyMap();
-
     this.keyboard.addEventListener('mousedown', (event) => {
       this.buttonHandlerDown(event.target.getAttribute('data'));
     });
-  
+
     this.keyboard.addEventListener('mouseup', (event) => {
       this.buttonHandlerUp(event.target.getAttribute('data'));
     });
@@ -184,6 +177,7 @@ class Keyboard {
       // row 4
       ControlLeft: new Button({ htmlParent: keyboard, keyCode: KEY_CODES.ControlLeft, enLower: 'Ctrl', enUpper: 'Ctrl', ruLower: 'Ctrl', ruUpper: 'Ctrl' }),
       AltLeft: new Button({ htmlParent: keyboard, keyCode: KEY_CODES.AltLeft, enLower: 'Alt', enUpper: 'Alt', ruLower: 'Alt', ruUpper: 'Alt' }),
+      SetLang: new Button ({htmlParent: keyboard, keyCode: KEY_CODES.SetLang, enLower: 'Lang', enUpper: 'Lang', ruLower: 'Lang', ruUpper: 'Lang'}),
       Space: new Button({ htmlParent: keyboard, keyCode: KEY_CODES.Space, enLower: 'Space', enUpper: 'Space', ruLower: 'Space', ruUpper: 'Space' }),
       AltRight: new Button({ htmlParent: keyboard, keyCode: KEY_CODES.AltRight, enLower: 'Alt', enUpper: 'Alt', ruLower: 'Alt', ruUpper: 'Alt' }),
       ArrowLeft: new Button({ htmlParent: keyboard, keyCode: KEY_CODES.ArrowLeft, enLower: '←', enUpper: '←', ruLower: '←', ruUpper: '←' }),
@@ -202,7 +196,7 @@ class Keyboard {
 
     sessionStorage.setItem('language', this.language);
     Object.values(this.keyMap).forEach((button) => {
-      button.getHtmlElement().innerHTML = button.getLangChar(language, letterCase);
+      button.getHtmlElement().innerHTML = button.getLangChar(this.language, this.letterCase);
     });
   }
 
@@ -284,6 +278,7 @@ class Keyboard {
     else if (keyCode === KEY_CODES.Backspace) this.backspace();
     else if (keyCode === KEY_CODES.Enter) this.enter();
     else if (keyCode === KEY_CODES.Tab) this.tab();
+    else if (keyCode === KEY_CODES.SetLang) this.changeLanguage();
     else if (keyCode === KEY_CODES.ShiftLeft || keyCode === KEY_CODES.ShiftRight) this.shiftDown();
     else this.textArea.value += this.keyMap[keyCode].getHtmlElement().innerHTML;
 
@@ -298,20 +293,7 @@ class Keyboard {
     if (keyCode === KEY_CODES.AltRight || keyCode === KEY_CODES.AltLeft) this.altUp();
     else if (keyCode === KEY_CODES.ShiftLeft || keyCode === KEY_CODES.ShiftRight) this.shiftUp();
   }
-
-  // document.addEventListener('keydown', (event) => {
-  //   if (this.keyMap[event.code] === undefined) return;
-  //   event.preventDefault();
-  //   this.buttonHandlerDown(event.code);
-  // });
-
-  // document.addEventListener('keyup', (event) => {
-  //   if (this.keyMap[event.code] === undefined) return;
-  //   event.preventDefault();
-  //   this.buttonHandlerUp(event.code);
-  // });
 }
-
 
 class Button {
   constructor({ htmlParent, keyCode, enLower, enUpper, ruLower, ruUpper }) {
@@ -346,5 +328,5 @@ class Button {
     return this.htmlKey;
   }
 }
-// const board = new Keyboard();
+
 export default Keyboard;
