@@ -1,0 +1,101 @@
+/* * {
+    font-family:"Baloo Thambi 2",  sans-serif;
+    font-weight: 600;
+    box-sizing: border-box;
+}
+
+body {
+    margin: auto;
+    background-color: white ;
+    width: 1020px;
+} */
+
+#keyboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    justify-content: center;
+    padding: 5px;
+    max-width: 880px;
+    margin: auto;
+    background-color: rgb(175, 172, 172);
+    box-shadow: 0 0 5px rgba(46, 45, 45, 0.8);
+    border-radius: 5px;   
+    color: white;
+}
+
+#textarea {
+    margin: 50px auto;
+    font-weight: 400;
+    width: 100%;
+    min-height: 150px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid rgb(32, 32, 32);
+}
+
+.k-key {
+    min-width: fit-content;
+    width: 5%;
+    min-height: fit-content;
+    height: 5%;
+    background-color:rgb(100, 99, 99) ;
+    box-shadow: 0 3px 10px rgba(46, 45, 45, 0.8);
+    border-radius: 3px;
+    text-align: center;
+    color: white;
+    border-top: 5px;
+    margin: 5px;
+    padding: 5px;
+    float: left;
+}
+
+.k-key:hover {
+    box-shadow: 0 3px 10px rgba(46, 45, 45, 0.8) inset;
+    cursor: pointer;
+}
+
+.active {
+    box-shadow:  inset 0px 0px 10px rgb(39, 39, 39);
+    transition: all 800ms linear;
+}
+
+.clearfix {
+    display: block;
+    width: 100%;
+    clear: both;
+}
+
+.Enter {
+    width: 11%;
+}
+
+.Backspace, .CapsLock {
+    width: 10%;
+}
+
+.Tab {
+    width: 8%;
+}
+
+.Delete {
+    width: 7%;
+}
+
+.ShiftLeft {
+    width: 10%;
+}
+
+.ShiftRight{
+    width: 11%;
+}
+
+.Space{
+    width: 46%;
+}
+
+.capsLock .active {
+    box-shadow:  inset 0px 0px 10px rgb(39, 39, 39);
+    transition: all 0.2s;
+}
