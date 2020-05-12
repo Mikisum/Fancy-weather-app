@@ -86,6 +86,7 @@ let keyboard = new Keyboard(input);
 keyboard.enter = submit;
 function createKeyboard() {
   keyboardContainer.append(keyboard.getHtmlElement());
+  input.focus();
 }
 
 function removeKeyboard() {

@@ -266,6 +266,20 @@ class Keyboard {
     });
   }
 
+  arrowLeft() {
+    if (this.textArea.selectionStart !== 0) {
+      this.textArea.selectionStart -= 1;
+      this.textArea.selectionEnd -= 1;
+    }
+  }
+
+  arrowRight() {
+    if (this.textArea.selectionStart !== 0){
+      this.textArea.selectionStart += 1;
+      this.textArea.selectionEnd += 1;
+    }
+  }
+
   buttonHandlerDown(keyCode) {
     this.textArea.focus();
     if (keyCode === null || keyCode === undefined) return;
@@ -280,6 +294,9 @@ class Keyboard {
     else if (keyCode === KEY_CODES.Tab) this.tab();
     else if (keyCode === KEY_CODES.SetLang) this.changeLanguage();
     else if (keyCode === KEY_CODES.ShiftLeft || keyCode === KEY_CODES.ShiftRight) this.shiftDown();
+    else if (keyCode === KEY_CODES.ArrowLeft) this.arrowLeft();
+    else if (keyCode === KEY_CODES.ArrowRight) this.arrowRight();
+    else if (keyCode === KEY_CODES.ArrowUp || keyCode === KEY_CODES.ArrowDown) return;
     else this.textArea.value += this.keyMap[keyCode].getHtmlElement().innerHTML;
 
     if (this.shiftPressed === true && this.altPressed === true) this.changeLanguage();
