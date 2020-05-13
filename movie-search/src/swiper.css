@@ -1,5 +1,6 @@
 .swiper-container {
   width: 90%;
+  height: 600px;
 }
 
 .swiper-wrapper {
@@ -10,8 +11,6 @@
   font-size: 18px;
   height: max-content;
   background:#fff;
-
-  /* Center slide text vertically */
   display: -webkit-box;
   display: -ms-flexbox;
   display: -webkit-flex;
@@ -25,6 +24,11 @@
   -webkit-align-items: center;
   align-items: center;
 }
+
+.swiper-slide:hover {
+  box-shadow: 0 5px 5px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);
+  transition: all ease-out 0.2s;
+} 
 
 .swiper-slide img {
     height: 400px;

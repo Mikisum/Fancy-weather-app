@@ -37,6 +37,10 @@ footer, header {
   color: #aaa;
 }
 
+.alert {
+  max-width: 500px !important;
+}
+
 .tools {
   position: absolute;
   top: 0%;
