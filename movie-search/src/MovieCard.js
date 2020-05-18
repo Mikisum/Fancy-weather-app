@@ -1,7 +1,9 @@
 const key = 'edb21aab';
 
 class MovieCard {
-  constructor({Title, Year, imdbID, Poster}) {
+  constructor({
+    Title, Year, imdbID, Poster,
+  }) {
     this.title = Title;
     this.year = Year;
     this.poster = Poster;
@@ -9,7 +11,7 @@ class MovieCard {
 
     this.htmlCard = document.createElement('div');
     this.htmlCard.className = 'swiper-slide card';
-    
+
     const poster = document.createElement('img');
     poster.className = 'card-img-top';
     poster.setAttribute('src', Poster);
@@ -47,16 +49,18 @@ class MovieCard {
     this.htmlRating.className = 'card-text';
     ratingContainer.append(this.htmlRating);
   }
-  
+
+  getHtmlCard() {
+    return this.htmlCard;
+  }
+
   fetchRating(id) {
     const url = `https://www.omdbapi.com/?i=${id}&apikey=${key}`;
     return fetch(url)
-      .then(res => res.json())
-      .then(data => this.htmlRating.innerText = data.imdbRating);
-  }
-  
-  getHtmlCard() {
-    return this.htmlCard;
+      .then((res) => res.json())
+      .then((data) => {
+        this.htmlRating.innerText = data.imdbRating;
+      });
   }
 }
 
