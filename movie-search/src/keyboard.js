@@ -448,33 +448,35 @@ class Keyboard {
 
   buttonHandlerDown(keyCode) {
     this.textArea.focus();
-    if (keyCode === null || keyCode === undefined) return;
-    this.keyMap[keyCode].getHtmlElement().classList.add('active');
-    if (keyCode === KEY_CODES.AltRight || keyCode === KEY_CODES.AltLeft) this.altDown();
-    else if (keyCode === KEY_CODES.ControlRight || keyCode === KEY_CODES.ControlLeft);
-    else if (keyCode === KEY_CODES.CapsLock) this.capsLock();
-    else if (keyCode === KEY_CODES.Delete) this.selectionDelete();
-    else if (keyCode === KEY_CODES.Space) this.space();
-    else if (keyCode === KEY_CODES.Backspace) this.backspace();
-    else if (keyCode === KEY_CODES.Enter) this.enter();
-    else if (keyCode === KEY_CODES.Tab) this.tab();
-    else if (keyCode === KEY_CODES.SetLang) this.changeLanguage();
-    else if (keyCode === KEY_CODES.ShiftLeft || keyCode === KEY_CODES.ShiftRight) this.shiftDown();
-    else if (keyCode === KEY_CODES.ArrowLeft) this.arrowLeft();
-    else if (keyCode === KEY_CODES.ArrowRight) this.arrowRight();
-    else if (keyCode === KEY_CODES.ArrowUp || keyCode === KEY_CODES.ArrowDown) return;
-    else this.textArea.value += this.keyMap[keyCode].getHtmlElement().innerHTML;
+    if (keyCode != null && keyCode !== KEY_CODES.ArrowUp && keyCode !== KEY_CODES.ArrowDown) {
+      this.keyMap[keyCode].getHtmlElement().classList.add('active');
+      if (keyCode === KEY_CODES.AltRight || keyCode === KEY_CODES.AltLeft) this.altDown();
+      else if (keyCode === KEY_CODES.ControlRight || keyCode === KEY_CODES.ControlLeft);
+      else if (keyCode === KEY_CODES.CapsLock) this.capsLock();
+      else if (keyCode === KEY_CODES.Delete) this.selectionDelete();
+      else if (keyCode === KEY_CODES.Space) this.space();
+      else if (keyCode === KEY_CODES.Backspace) this.backspace();
+      else if (keyCode === KEY_CODES.Enter) this.enter();
+      else if (keyCode === KEY_CODES.Tab) this.tab();
+      else if (keyCode === KEY_CODES.SetLang) this.changeLanguage();
+      else if (keyCode === KEY_CODES.ShiftLeft
+        || keyCode === KEY_CODES.ShiftRight) this.shiftDown();
+      else if (keyCode === KEY_CODES.ArrowLeft) this.arrowLeft();
+      else if (keyCode === KEY_CODES.ArrowRight) this.arrowRight();
+      else this.textArea.value += this.keyMap[keyCode].getHtmlElement().innerHTML;
 
-    if (this.shiftPressed === true && this.altPressed === true) this.changeLanguage();
+      if (this.shiftPressed === true && this.altPressed === true) this.changeLanguage();
+    }
   }
 
   buttonHandlerUp(keyCode) {
     this.textArea.focus();
-    if (keyCode === null || keyCode === undefined) return;
-    if (keyCode === KEY_CODES.CapsLock) return;
-    this.keyMap[keyCode].getHtmlElement().classList.remove('active');
-    if (keyCode === KEY_CODES.AltRight || keyCode === KEY_CODES.AltLeft) this.altUp();
-    else if (keyCode === KEY_CODES.ShiftLeft || keyCode === KEY_CODES.ShiftRight) this.shiftUp();
+    if (keyCode !== null && keyCode !== KEY_CODES.ArrowUp && keyCode !== KEY_CODES.ArrowDown) {
+      if (keyCode === KEY_CODES.CapsLock) return;
+      this.keyMap[keyCode].getHtmlElement().classList.remove('active');
+      if (keyCode === KEY_CODES.AltRight || keyCode === KEY_CODES.AltLeft) this.altUp();
+      else if (keyCode === KEY_CODES.ShiftLeft || keyCode === KEY_CODES.ShiftRight) this.shiftUp();
+    }
   }
 }
 export default Keyboard;
