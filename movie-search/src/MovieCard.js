@@ -21,7 +21,8 @@ class MovieCard {
 
     const title = document.createElement('a');
     title.className = 'nav-link';
-    title.setAttribute('href', `https://www.imdb.com/title/${imdbID}/videogallery`);
+    title.setAttribute('target', '_blank');
+    title.setAttribute('href', `https://www.imdb.com/title/${imdbID}/videogallery/window-open`);
     title.innerText = Title;
     cardBody.append(title);
 
