@@ -1,4 +1,5 @@
 const key = 'edb21aab';
+const omdapi = 'https://www.omdbapi.com/';
 
 class MovieCard {
   constructor({
@@ -55,7 +56,7 @@ class MovieCard {
   }
 
   fetchRating(id) {
-    const url = `https://www.omdbapi.com/?i=${id}&apikey=${key}`;
+    const url = `${omdapi}?i=${id}&apikey=${key}`;
     return fetch(url)
       .then((res) => res.json())
       .then((data) => {
@@ -64,4 +65,4 @@ class MovieCard {
   }
 }
 
-export { MovieCard, key };
+export { MovieCard, key, omdapi };

@@ -1,6 +1,6 @@
 import swiper from './swiper';
 import './style.css';
-import { MovieCard, key } from './MovieCard';
+import { MovieCard, key, omdapi } from './MovieCard';
 import Keyboard from './keyboard';
 import './keyboard.css';
 
@@ -19,7 +19,6 @@ input.focus();
 
 let page = 1;
 let word = 'home';
-const urlOmdb = `https://www.omdbapi.com/?s=${word}&page=${page}&apikey=${key}`;
 const loadIcon = document.createElement('span');
 function createLoadIcon() {
   loadIcon.className = 'spinner-border spinner-border-sm';
@@ -29,7 +28,8 @@ function createLoadIcon() {
 }
 
 function getMovies() {
-  return fetch(urlOmdb)
+  const url = `${omdapi}?s=${word}&page=${page}&apikey=${key}`;
+  return fetch(url)
     .then((res) => res.json())
     .then((data) => {
       if (!data.Search) {
