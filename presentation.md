@@ -1,3 +1,3 @@
-A link to my YouTube video
-A link to my Reveal presentation
-A link to the transcript of my presentation;
+- A link to my YouTube video https://www.youtube.com/watch?v=_-ppxw9Pt4k
+- A link to my Reveal presentation
+- A link to the transcript of my presentation;
