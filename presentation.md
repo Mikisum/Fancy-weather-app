@@ -1,3 +1,3 @@
 - A link to my YouTube video https://www.youtube.com/watch?v=_-ppxw9Pt4k
-- A link to my Reveal presentation https://github.com/Mikisum/Presentation/tree/reveal.js-pug-babel-sass/src
+- A link to my Reveal presentation https://github.com/Mikisum/Presentation/tree/reveal.js-pug-babel-sass/src/slides
 - A link to the transcript of my presentation https://github.com/Mikisum/Presentation/blob/reveal.js-pug-babel-sass/src/transcript.md
