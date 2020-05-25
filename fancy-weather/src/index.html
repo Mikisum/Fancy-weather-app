@@ -8,17 +8,20 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.16.0/css/mdb.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i&amp;display=swap&amp;subset=cyrillic" rel="stylesheet">
     <title>Fancy-weather</title>
 </head>
 <body>
+    <div class="w-75 mx-auto">
+
     <div class="header row p-5">
         <div class="col">
             <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                <button type="button" class="btn btn-secondary">
+                <button type="button" class="btn mb-0">
                     <i class="fas fa-sync"></i>
                 </button> 
                 <div class="btn-group" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                    <button id="btnGroupDrop1" type="button" class="btn dropdown-toggle mb-0" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                         En
                     </button>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-lef" aria-labelledby="btnGroupDrop1">
@@ -26,10 +29,10 @@
                     </div>
                 </div>
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-secondary active">
+                <label class="btn active">
                     <input type="radio" name="options" id="option1" checked>°C
                 </label>
-                <label class="btn btn-secondary">
+                <label class="btn">
                     <input type="radio" name="options" id="option2">°F
                 </label>
             </div>
@@ -39,13 +42,61 @@
             <form role="search" method="get" class="form search-form" action="/index.php">
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search city">
-                <span class="input-group-text"><i class="fas fa-microphone"></i></span>
-                <button class="btn btn-danger" type="button"><i class="fa fa-search" aria-hidden="true"></i></button> 
+                <span class="microphone"><i class="fas fa-microphone" aria-hidden="true"></i></span>
+                <button class="btn m-0" type="button"><i class="fa fa-search" aria-hidden="true"></i></button> 
               </div>
             </form>
         </div>
     </div> 
-        
+        <div class="row p-5">
+            <div class="weather col-md-8">
+                <div class="weather-location">
+                  <span class="city">Minsk,</span> 
+                  <span class="republic">Belarus</span>
+                </div>    
+                <div class="weather-time">Mon 25 May 17:39</div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="weather-temperature">13</div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="wheather-icon"></div>
+                        <div class="wheather-data"></div>
+                    </div>
+                </div>
+                <div class="card-group">
+                    <div class="card forecast">
+                        <h5 class="card-title forecast_day">tuesday</h5>
+                        <div class="d-inline-flex">
+                            <p class="card-text forecast_temperature">14</p>
+                            <img class="forecast_icon" src="" alt="">
+                        </div>
+                    </div>
+                    <div class="card forecast">
+                        <h5 class="card-title forecast_day">tuesday</h5>
+                        <div class="d-inline-flex">
+                            <p class="card-text forecast_temperature">14</p>
+                            <img class="forecast_icon" src="" alt="">
+                        </div>
+                    </div>
+                    <div class="card forecast">
+                        <h5 class="card-title forecast_day">tuesday</h5>
+                        <div class="d-inline-flex">
+                            <p class="card-text forecast_temperature">14</p>
+                            <img class="forecast_icon" src="" alt="">
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="map col-md-4">
+                <div id="map-container" class="z-depth-1 map-container" style="height: 500px">
+                    <iframe src="https://maps.google.com/maps?q=manhatan&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0"
+                      style="border:0" allowfullscreen></iframe>
+                </div>
+            </div>         
+        </div>
+    </div>    
     <script src="../src/index.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
