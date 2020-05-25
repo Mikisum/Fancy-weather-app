@@ -1,0 +1,19 @@
+body {
+    background: linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed, url("images/background.jpg") center center no-repeat fixed;
+}
+
+.form-control {
+    width: 27.4rem;
+    height: 4.4rem;
+    border: .1rem solid rgba(180,184,187,.7);
+    border-radius: .5rem 0 0 .5rem;
+    padding: 1.3rem 1.5rem;
+    background: rgba(76,82,85,.7);
+    font-family: inherit;
+    font-size: 1.4rem;
+    color: #fff;
+}
+.btn {
+    padding: 5px 20px !important;
+    margin: 0 !important;
+}
