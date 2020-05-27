@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0 minimum-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../src/style.css">
     <link rel="icon" href="data:;base64,=">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.16.0/css/mdb.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i&amp;display=swap&amp;subset=cyrillic" rel="stylesheet">
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
     <title>Fancy-weather</title>
 </head>
 <body>
@@ -43,9 +43,9 @@
         <div class="col">
             <form role="search" method="get" class="form search-form" action="/index.php">
               <div class="input-group">
-                <input type="text" class="form-control" id="search" placeholder="Search city">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search city">
                 <span class="microphone"><i class="fas fa-microphone" aria-hidden="true"></i></span>
-                <button class="btn m-0" type="button"><i class="fa fa-search" aria-hidden="true"></i></button> 
+                <button class="btn m-0" type="button" id="buttonSearch"><i class="fa fa-search" aria-hidden="true"></i></button> 
               </div>
             </form>
         </div>
@@ -53,13 +53,19 @@
         <div class="row p-5">
             <div class="weather col-md-8">
                 <div class="weather-location">
-                  <span data-i18n="city" class="city">Minsk,</span> 
-                  <span data-i18n="republic" class="republic">Belarus</span>
+                  <span data-i18n="city" id="city" class="city">Minsk,</span> 
+                  <span data-i18n="republic" id="country" class="republic">Belarus</span>
                 </div>    
                 <div data-i18n class="weather-time">Mon 25 May 17:39</div>
                 <div class="row">
-                    <div class="col-sm-8">
+                    <div class="col-sm-8 d-inline-flex">
                         <div class="weather-temperature">13</div>
+                        <div class="weather-data">
+                            <p id="text">sdlkgj</p>
+                            <p id="feelslike">2222</p>
+                            <p id="wind">2</p>
+                            <p id="humidity">24</p>
+                        </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="wheather-icon"></div>
@@ -71,35 +77,31 @@
                         <h5 data-i18n="day" class="card-title forecast_day">tuesday</h5>
                         <div class="d-inline-flex">
                             <p class="card-text forecast_temperature">14</p>
-                            <img class="forecast_icon" src="" alt="">
+                            <!-- <img class="forecast_icon" src="" alt=""> -->
                         </div>
                     </div>
                     <div class="card forecast">
                         <h5 data-i18n class="card-title forecast_day">tuesday</h5>
                         <div class="d-inline-flex">
                             <p class="card-text forecast_temperature">14</p>
-                            <img class="forecast_icon" src="" alt="">
+                            <!-- <img class="forecast_icon" src="" alt=""> -->
                         </div>
                     </div>
                     <div class="card forecast">
                         <h5 data-i18n class="card-title forecast_day">tuesday</h5>
                         <div class="d-inline-flex">
                             <p class="card-text forecast_temperature">14</p>
-                            <img class="forecast_icon" src="" alt="">
+                            <!-- <img class="forecast_icon" src="" alt=""> -->
                         </div>
                     </div>
                     
                 </div>
             </div>
-            <div class="map col-md-4">
-                <div id="map-container" class="z-depth-1 map-container" style="height: 500px">
-                    <iframe src="https://maps.google.com/maps?q=manhatan&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0"
-                      style="border:0" allowfullscreen></iframe>
-                </div>
+            <div class="map col-md-4" id="map">
+               
             </div>         
         </div>
     </div>    
-    <script src="../src/index.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
