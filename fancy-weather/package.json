@@ -1,5 +1,5 @@
 {
-  "name": "english-for-kids",
+  "name": "fancy-weatherwe",
   "version": "1.0.0",
   "description": "WebPack: HTML, CSS, SCSS, JS, Img, Fonts",
   "main": "",
@@ -21,6 +21,7 @@
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
+    "@types/mapbox-gl": "^1.10.2",
     "autoprefixer": "^9.7.6",
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^5.1.1",
@@ -51,6 +52,7 @@
     "bootstrap": "^4.5.0",
     "core-js": "^3.6.5",
     "http-server": "^0.12.3",
+    "mapbox-gl": "^1.10.1",
     "mdbootstrap": "^4.19.0",
     "regenerator-runtime": "^0.13.5"
   }
