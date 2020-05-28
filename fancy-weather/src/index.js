@@ -1,4 +1,6 @@
 import "./style.css";
+import getTime from './time.js';
+
 const elementToTranslate = document.querySelectorAll('[data-i18n]');
 const searchInput = document.getElementById('searchInput');
 const changeLanguageButton = document.getElementById('languageButton');
@@ -13,6 +15,7 @@ const languages = {
 
 window.addEventListener('load', () =>{
     getPosition();
+    getTime();
 });
 const latitudeHtml = document.getElementById('latitude');
 const longitudeHtml = document.getElementById('longitude');
