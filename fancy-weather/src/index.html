@@ -53,8 +53,12 @@
         <div class="row p-5">
             <div class="weather col-md-8">
                 <div class="weather-location">
-                  <span data-i18n="city" id="city" class="city">Minsk,</span> 
-                  <span data-i18n="republic" id="country" class="republic">Belarus</span>
+                  <span data-i18n="name" id="name" class="name">Minsk</span>
+                  <div>
+                    <span data-i18n="city" id="region" class="city">Minsk</span>   
+                    <span data-i18n="country" id="country" class="republic">Belarus</span>  
+                  </div>   
+                  
                 </div>    
                 <div data-i18n class="weather-time">Mon 25 May 17:39</div>
                 <div class="row">
@@ -76,31 +80,33 @@
                     <div class="card forecast">
                         <h5 data-i18n="day" class="card-title forecast_day">tuesday</h5>
                         <div class="d-inline-flex">
-                            <p class="card-text forecast_temperature">14</p>
+                            <p class="card-text" id="forecastday1">14</p>
                             <!-- <img class="forecast_icon" src="" alt=""> -->
                         </div>
                     </div>
                     <div class="card forecast">
                         <h5 data-i18n class="card-title forecast_day">tuesday</h5>
                         <div class="d-inline-flex">
-                            <p class="card-text forecast_temperature">14</p>
+                            <p class="card-text" id="forecastday2">14</p>
                             <!-- <img class="forecast_icon" src="" alt=""> -->
                         </div>
                     </div>
                     <div class="card forecast">
                         <h5 data-i18n class="card-title forecast_day">tuesday</h5>
                         <div class="d-inline-flex">
-                            <p class="card-text forecast_temperature">14</p>
+                            <p class="card-text" id="forecastday3">14</p>
                             <!-- <img class="forecast_icon" src="" alt=""> -->
                         </div>
                     </div>
                     
                 </div>
             </div>
-            <div class="map col-md-4" id="map">
+            <div class="map col-md-4">
+               <div id="map"></div>
                <p id="latitude"></p>
-               <p id="longitude"></p>
-            </div>         
+              <p id="longitude"></p> 
+            </div> 
+                   
         </div>
     </div>    
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
