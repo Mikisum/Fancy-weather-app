@@ -16,7 +16,7 @@ const languages = {
 
 window.addEventListener('load', () =>{
     getPosition();
-    getTime();
+    setInterval(getTime, 1000);
 });
 const latitudeHtml = document.getElementById('latitude');
 const longitudeHtml = document.getElementById('longitude');
@@ -31,8 +31,8 @@ let longitude;
             map.flyTo({ center: [longitude, latitude] });
             latitudeHtml.innerText = `Latitude: ${getDMS(latitude, 'lat')}`;
             longitudeHtml.innerText = `Longitude: ${getDMS(longitude, 'long')}`;
-            getCurrentWeather(`${latitude}, ${longitude}`);
             getWeatherForDays(`${latitude}, ${longitude}`);
+            getWeatherForThirdDay(`${latitude}, ${longitude}`);
         });
     }   
 };
@@ -57,7 +57,7 @@ document.addEventListener('click', (event) => {
     }
     if (event.target.id === 'buttonSearch') {
         event.preventDefault(); 
-        getCurrentWeather(searchInput.value);
+        getWeatherForDays(searchInput.value);
         getLocation();
     }
 });
@@ -73,17 +73,11 @@ const region = document.getElementById('region');
 const country = document.getElementById('country');
 const name = document.getElementById('name');
 
-function getCurrentWeather(value) {
-const weatherUrl = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${value}`    
-    return fetch(weatherUrl)
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data);
-            setCurrentWeatherData(data);
-        });    
-};
+const forecastDay1 = document.getElementById('forecastday1');
+const forecastDay2 = document.getElementById('forecastday2');
+const forecastDay3 = document.getElementById('forecastday3');
 
-function setCurrentWeatherData(data) {
+function setWeatherData(data) {
     temperature.innerText = `${Math.round(data.current.temp_c)}°`;
     weatherText.innerText = data.current.condition.text;
     feelslike.innerText = `Feels Like: ${Math.round(data.current.feelslike_c)}°`;
@@ -92,27 +86,38 @@ function setCurrentWeatherData(data) {
     name.innerText = data.location.name;
     region.innerText = data.location.region;
     country.innerText = data.location.country;
+    forecastDay1.innerText = `${data.forecast.forecastday[1].day.avgtemp_c}°`;
+    forecastDay2.innerText = `${data.forecast.forecastday[2].day.avgtemp_c}°`;
 }
-let currentDate =
-console.log(new Date().setDate(getDate() + 1));
+
+function setWeatherForThirdDay(data) {
+    forecastDay3.innerText = `${data.forecast.forecastday[0].day.avgtemp_c}°`;
+}
+
 function getWeatherForDays(value) {
-    const weatherDaysUrl =  `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=q=${value}&dt=2020-05-30`;
+    const weatherDaysUrl =  `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${value}&days=3`;
+    console.log(weatherDaysUrl);
     return fetch(weatherDaysUrl)
         .then((res) => res.json())
         .then((data) => {
             console.log(data);
-            setWeatherForDays(data)
+            setWeatherData(data);
         })    
 }
-const forecastDay1 = document.getElementById('forecastday1');
-const forecastDay2 = document.getElementById('forecastday2');
-const forecastDay3 = document.getElementById('forecastday3');
 
-function setWeatherForDays(data) {
-    forecastDay1.innerText = data.forecast.forecastday[1].day.avgtemp_c;
-
-};
-
+function getWeatherForThirdDay(value) {
+    let today = getTime();
+    console.log(today);
+    let thirdDay = (new Date(today.setDate(today.getDate() + 3))).toISOString().slice(0,10);
+    console.log(thirdDay);
+    const weatherTherdDay =  `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${value}&dt=${thirdDay}`;
+    return fetch(weatherTherdDay)
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            setWeatherForThirdDay(data)
+        })    
+}
 
 function truncate(n) {
     return n > 0 ? Math.floor(n) : Math.ceil(n);
@@ -151,21 +156,8 @@ function getTime() {
     const currentTime = `${hours}:${minutes}:${seconds}`;
     time.innerText = currentTime;
     day.innerText = `${days[currentDay].substring(0,3)} ${currentDate} ${months[currentMonth]} `;
-    return {taday: a, tr: d};
+    return today;
 }
-setInterval(getTime, 1000);
-
-// let lat = 13.041107;
-// let lon = 80.233232;
-
-// let latDMS = getDMS(lat, 'lat'); 
-// let lonDMS = getDMS(lon, 'long');
-// console.log('latDMS: '+ latDMS);
-// console.log('lonDMS: '+ lonDMS);
-
-
-
-
 
 var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
