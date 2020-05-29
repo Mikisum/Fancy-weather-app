@@ -16,6 +16,7 @@ const languages = {
 
 window.addEventListener('load', () =>{
     getPosition();
+    getImages();
     setInterval(getTime, 1000);
 });
 const latitudeHtml = document.getElementById('latitude');
@@ -27,7 +28,6 @@ let longitude;
         navigator.geolocation.getCurrentPosition((position) => {
             latitude  = position.coords.latitude;
             longitude = position.coords.longitude;
-            console.log(position.coords);
             map.flyTo({ center: [longitude, latitude] });
             latitudeHtml.innerText = `Latitude: ${getDMS(latitude, 'lat')}`;
             longitudeHtml.innerText = `Longitude: ${getDMS(longitude, 'long')}`;
@@ -36,6 +36,19 @@ let longitude;
         });
     }   
 };
+const apiKeyFlikr = '2f8ea488a21e4fac07f04c7fffc9898d';
+
+function getImages() {
+    const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKeyFlikr}&tags=nature,spring,morning&tag_mode=all&extras=url_h&format=json&nojsoncallback=1`;
+    return fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data);
+        let random = Math.round(Math.random()*100);
+        let url = data.photos.photo[random].url_h;
+        document.body.style.backgroundImage = `url(\'${url}\')`;
+    })    
+}
 
 function translate(lang) {
     return fetch(`languages/${languages[lang]}`)
@@ -96,25 +109,23 @@ function setWeatherForThirdDay(data) {
 
 function getWeatherForDays(value) {
     const weatherDaysUrl =  `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${value}&days=3`;
-    console.log(weatherDaysUrl);
+    // console.log(weatherDaysUrl);
     return fetch(weatherDaysUrl)
         .then((res) => res.json())
         .then((data) => {
-            console.log(data);
+            // console.log(data);
             setWeatherData(data);
         })    
 }
 
 function getWeatherForThirdDay(value) {
     let today = getTime();
-    console.log(today);
     let thirdDay = (new Date(today.setDate(today.getDate() + 3))).toISOString().slice(0,10);
-    console.log(thirdDay);
     const weatherTherdDay =  `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${value}&dt=${thirdDay}`;
     return fetch(weatherTherdDay)
         .then((res) => res.json())
         .then((data) => {
-            console.log(data);
+            // console.log(data);
             setWeatherForThirdDay(data)
         })    
 }

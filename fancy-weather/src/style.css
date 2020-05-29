@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed, url("images/background.jpg") center center no-repeat fixed;
+    background: linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed;
     color: white !important;
 }
 
