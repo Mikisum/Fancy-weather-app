@@ -1,5 +1,6 @@
 import "./style.css";
-import getTime from './time.js';
+import months from './months.js';
+import days from './days.js';
 
 const elementToTranslate = document.querySelectorAll('[data-i18n]');
 const searchInput = document.getElementById('searchInput');
@@ -79,7 +80,6 @@ const weatherUrl = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=$
         .then((data) => {
             console.log(data);
             setCurrentWeatherData(data);
-            map.flyTo({ center: [longitude, latitude] });
         });    
 };
 
@@ -93,6 +93,8 @@ function setCurrentWeatherData(data) {
     region.innerText = data.location.region;
     country.innerText = data.location.country;
 }
+let currentDate =
+console.log(new Date().setDate(getDate() + 1));
 function getWeatherForDays(value) {
     const weatherDaysUrl =  `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=q=${value}&dt=2020-05-30`;
     return fetch(weatherDaysUrl)
@@ -134,13 +136,32 @@ let getDMS = function (dd, longOrLat) {
     return `${dmsArray[0]}°${dmsArray[1]}'${dmsArray[2]}" ${dmsArray[3]}`;
 }
 
-let lat = 13.041107;
-let lon = 80.233232;
+const time = document.getElementById('time');
+const day= document.getElementById('date');
 
-let latDMS = getDMS(lat, 'lat'); 
-let lonDMS = getDMS(lon, 'long');
-console.log('latDMS: '+ latDMS);
-console.log('lonDMS: '+ lonDMS);
+function getTime() {
+    const today = new Date();
+    let hours = today.getHours();
+    let minutes = today.getMinutes();
+    let seconds = today.getSeconds();
+    const currentDate = today.getDate(); 
+    const currentMonth = today.getUTCMonth();
+    const currentDay = today.getDay();
+
+    const currentTime = `${hours}:${minutes}:${seconds}`;
+    time.innerText = currentTime;
+    day.innerText = `${days[currentDay].substring(0,3)} ${currentDate} ${months[currentMonth]} `;
+    return {taday: a, tr: d};
+}
+setInterval(getTime, 1000);
+
+// let lat = 13.041107;
+// let lon = 80.233232;
+
+// let latDMS = getDMS(lat, 'lat'); 
+// let lonDMS = getDMS(lon, 'long');
+// console.log('latDMS: '+ latDMS);
+// console.log('lonDMS: '+ lonDMS);
 
 
 
