@@ -42,7 +42,7 @@ function updateWeather (location) {
 }
 
 function updateBackground() {
-    const random = Math.round(Math.random() * 100);
+    const random = Math.round(Math.random() * backgroudImages.length);
     const imageUrl = backgroudImages[random].url_h;
     document.body.style.background = `linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed, url(\'${imageUrl}\') center center no-repeat fixed`;
     document.body.style.backgroundSize = 'cover';
@@ -72,6 +72,7 @@ function translate(lang) {
                 element.textContent = langFile[element.dataset.i18n];
                 });
                 searchInput.setAttribute("placeholder", langFile['search']);
+                weatherText.innerText = langFile.weather[weatherText.getAttribute('data')];
             });
 }
 
@@ -114,11 +115,11 @@ function temperatureConverter(units) {
         temperatureElements.forEach(element => {
             if (units === "F") {
                 const degree = parseFloat(element.innerText);
-                element.innerText = `${(degree * 1.8) + 32}°`;
+                element.innerText = `${Math.round((degree * 1.8) + 32)}°`;
             }
             else {
                 const degree = parseFloat(element.innerText);
-                element.innerText = `${(degree - 32) / 1.8}°`;
+                element.innerText = `${Math.round((degree - 32) / 1.8)}°`;
             }
         });
         temperatureUnits = units;
@@ -143,6 +144,7 @@ const weatherForDay3 = document.getElementById('weatherForDay3');
 function setWeatherData(data) {
     currentTemperature.innerText = `${data.current.temp_c}°`;
     weatherText.innerText = data.current.condition.text;
+    weatherText.setAttribute('data', data.current.condition.text);
     feelslike.innerText = `Feels Like: ${Math.round(data.current.feelslike_c)}°`;
     wind.innerText = `Wind: ${Math.round(data.current.wind_kph * 1000 / 60 / 60)} m/s`;
     humidity.innerText = `Humidity: ${data.current.humidity}%`;
@@ -164,7 +166,7 @@ function getWeatherData(value) {
     return fetch(weatherDaysUrl)
         .then((res) => res.json())
         .then((data) => {
-            // console.log(data);
+            console.log(data);
             setWeatherData(data);
         })    
 }
