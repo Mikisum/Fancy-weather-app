@@ -8,4 +8,8 @@ const days = {
     6: 'Saturday',
 }
 
-export default days;
+function getDayName(dayNum) {
+    return dayNum < 7 ? days[dayNum] : days[dayNum - 7]
+}
+
+export default getDayName;

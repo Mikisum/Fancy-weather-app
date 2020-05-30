@@ -1,12 +1,11 @@
 import "./style.css";
 import months from './months.js';
-import days from './days.js';
+import getDayName from './days.js';
 
 const elementToTranslate = document.querySelectorAll('[data-i18n]');
 const searchInput = document.getElementById('searchInput');
 const changeLanguageButton = document.getElementById('languageButton');
 const languageButton = document.querySelectorAll('.dropdown-item');
-const buttonSearch = document.getElementById('buttonSearch');
 
 const languages = {
     EN : "en.json",
@@ -14,40 +13,55 @@ const languages = {
     BE : "be.json",
 }
 
-window.addEventListener('load', () =>{
-    getPosition();
-    getImages();
-    setInterval(getTime, 1000);
+let backgroudImages = [];
+
+window.addEventListener('load', () => {
+    getImages()
+        .then((res) => res.json())
+        .then((data) => {
+            backgroudImages = data.photos.photo;
+            updateBackground();
+        });
+    updateDate();
+    setInterval(updateTime, 1000);
+    getPosition(updateWeather);
 });
+
 const latitudeHtml = document.getElementById('latitude');
 const longitudeHtml = document.getElementById('longitude');
-function getPosition() {
-let latitude;
-let longitude;
+
+function updatePosition (latitude, longitude) {
+    latitudeHtml.innerText = `Latitude: ${getDMS(latitude, 'lat')}`;
+    longitudeHtml.innerText = `Longitude: ${getDMS(longitude, 'long')}`;
+    map.flyTo({ center: [longitude, latitude] });
+}
+
+function updateWeather (location) {
+    getWeatherData(location);
+    getWeatherForThirdDay(location);
+}
+
+function updateBackground() {
+    const random = Math.round(Math.random() * 100);
+    const imageUrl = backgroudImages[random].url_h;
+    document.body.style.background = `linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed, url(\'${imageUrl}\') center center no-repeat fixed`;
+    document.body.style.backgroundSize = 'cover';
+}
+
+function getPosition(callback) {
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
-            latitude  = position.coords.latitude;
-            longitude = position.coords.longitude;
-            map.flyTo({ center: [longitude, latitude] });
-            latitudeHtml.innerText = `Latitude: ${getDMS(latitude, 'lat')}`;
-            longitudeHtml.innerText = `Longitude: ${getDMS(longitude, 'long')}`;
-            getWeatherForDays(`${latitude}, ${longitude}`);
-            getWeatherForThirdDay(`${latitude}, ${longitude}`);
+            const latitude  = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            callback(`${latitude}, ${longitude}`);
         });
-    }   
+    }
 };
-const apiKeyFlikr = '2f8ea488a21e4fac07f04c7fffc9898d';
 
+const apiKeyFlikr = '2f8ea488a21e4fac07f04c7fffc9898d';
 function getImages() {
     const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKeyFlikr}&tags=nature,spring,morning&tag_mode=all&extras=url_h&format=json&nojsoncallback=1`;
-    return fetch(url)
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data);
-        let random = Math.round(Math.random()*100);
-        let url = data.photos.photo[random].url_h;
-        document.body.style.backgroundImage = `url(\'${url}\')`;
-    })    
+    return fetch(url);
 }
 
 function translate(lang) {
@@ -68,16 +82,52 @@ document.addEventListener('click', (event) => {
             changeLanguageButton.innerText = event.target.innerText;
             translate(changeLanguageButton.innerText);
     }
-    if (event.target.id === 'buttonSearch') {
-        event.preventDefault(); 
-        getWeatherForDays(searchInput.value);
-        getLocation();
+    else if (event.target.id === 'buttonSearch') {
+        event.preventDefault();
+        updateWeather(searchInput.value);
+        updateBackground();
+    }
+    else if (event.target.id === 'syncButton') {
+        updateBackground();
+    }
+    else if (event.target.id === 'CelToFar') {
+        temperatureConverter("F");
+    }
+    else if (event.target.id === 'FarToCel') {
+        temperatureConverter("C");
     }
 });
+const searchForm = document.getElementById('searchForm');
+searchForm.addEventListener('keypress', (event) => {
+    if (event.keyCode == 13) {
+        event.preventDefault();
+        updateWeather(searchInput.value);
+        updateBackground();
+    }
+});
+
+let temperatureUnits = "C";
+const temperatureElements = document.getElementsByClassName('temperature');
+function temperatureConverter(units) {
+    if (units !== temperatureUnits)
+    {
+        temperatureElements.forEach(element => {
+            if (units === "F") {
+                const degree = parseFloat(element.innerText);
+                element.innerText = `${(degree * 1.8) + 32}°`;
+            }
+            else {
+                const degree = parseFloat(element.innerText);
+                element.innerText = `${(degree - 32) / 1.8}°`;
+            }
+        });
+        temperatureUnits = units;
+    }
+};
 const apiKey = 'd9cbddc7739840c4bd5122238202605';
 
 
-const temperature = document.getElementById('temperature');
+const currentTemperature = document.getElementById('temperature');
 const weatherText = document.getElementById('text');
 const feelslike = document.getElementById('feelslike');
 const wind = document.getElementById('wind');
@@ -86,12 +136,12 @@ const region = document.getElementById('region');
 const country = document.getElementById('country');
 const name = document.getElementById('name');
 
-const forecastDay1 = document.getElementById('forecastday1');
-const forecastDay2 = document.getElementById('forecastday2');
-const forecastDay3 = document.getElementById('forecastday3');
+const weatherForDay1 = document.getElementById('weatherForDay1');
+const weatherForDay2 = document.getElementById('weatherForDay2');
+const weatherForDay3 = document.getElementById('weatherForDay3');
 
 function setWeatherData(data) {
-    temperature.innerText = `${Math.round(data.current.temp_c)}°`;
+    currentTemperature.innerText = `${data.current.temp_c}°`;
     weatherText.innerText = data.current.condition.text;
     feelslike.innerText = `Feels Like: ${Math.round(data.current.feelslike_c)}°`;
     wind.innerText = `Wind: ${Math.round(data.current.wind_kph * 1000 / 60 / 60)} m/s`;
@@ -99,15 +149,16 @@ function setWeatherData(data) {
     name.innerText = data.location.name;
     region.innerText = data.location.region;
     country.innerText = data.location.country;
-    forecastDay1.innerText = `${data.forecast.forecastday[1].day.avgtemp_c}°`;
-    forecastDay2.innerText = `${data.forecast.forecastday[2].day.avgtemp_c}°`;
+    weatherForDay1.innerText = `${data.forecast.forecastday[1].day.avgtemp_c}°`;
+    weatherForDay2.innerText = `${data.forecast.forecastday[2].day.avgtemp_c}°`;
+    updatePosition(data.location.lat, data.location.lon);
 }
 
 function setWeatherForThirdDay(data) {
-    forecastDay3.innerText = `${data.forecast.forecastday[0].day.avgtemp_c}°`;
+    weatherForDay3.innerText = `${data.forecast.forecastday[0].day.avgtemp_c}°`;
 }
 
-function getWeatherForDays(value) {
+function getWeatherData(value) {
     const weatherDaysUrl =  `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${value}&days=3`;
     // console.log(weatherDaysUrl);
     return fetch(weatherDaysUrl)
@@ -118,9 +169,10 @@ function getWeatherForDays(value) {
         })    
 }
 
+
 function getWeatherForThirdDay(value) {
-    let today = getTime();
-    let thirdDay = (new Date(today.setDate(today.getDate() + 3))).toISOString().slice(0,10);
+    const today = new Date();
+    const thirdDay = (new Date(today.setDate(today.getDate() + 3))).toISOString().slice(0,10);
     const weatherTherdDay =  `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${value}&dt=${thirdDay}`;
     return fetch(weatherTherdDay)
         .then((res) => res.json())
@@ -155,19 +207,28 @@ let getDMS = function (dd, longOrLat) {
 const time = document.getElementById('time');
 const day= document.getElementById('date');
 
-function getTime() {
+const day1 = document.getElementById('day1');
+const day2 = document.getElementById('day2');
+const day3 = document.getElementById('day3');
+
+function updateDate() {
     const today = new Date();
-    let hours = today.getHours();
-    let minutes = today.getMinutes();
-    let seconds = today.getSeconds();
     const currentDate = today.getDate(); 
     const currentMonth = today.getUTCMonth();
     const currentDay = today.getDay();
+    day.innerText = `${getDayName(currentDay).substring(0,3)} ${currentDate} ${months[currentMonth]} `;
+    day1.innerText = getDayName(currentDay + 1);
+    day2.innerText = getDayName(currentDay + 2);
+    day3.innerText = getDayName(currentDay + 3);
+}
 
+function updateTime() {
+    const today = new Date();
+    const hours = today.getHours();
+    const minutes = today.getMinutes();
+    const seconds = today.getSeconds();
     const currentTime = `${hours}:${minutes}:${seconds}`;
     time.innerText = currentTime;
-    day.innerText = `${days[currentDay].substring(0,3)} ${currentDate} ${months[currentMonth]} `;
-    return today;
 }
 
 var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
@@ -180,13 +241,13 @@ var map = new mapboxgl.Map({
 });
 
 
-function getLocation() {
-const locationUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchInput.value}.json?&autocomplete=false&access_token=${mapboxgl.accessToken}`;
-    return fetch(locationUrl)
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data);
-            // setWeatherInfo(data)
-        });    
-};
+// function getLocation() {
+// const locationUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchInput.value}.json?&autocomplete=false&access_token=${mapboxgl.accessToken}`;
+//     return fetch(locationUrl)
+//         .then((res) => res.json())
+//         .then((data) => {
+//             // console.log(data);
+//             // setWeatherInfo(data)
+//         });    
+// };
 

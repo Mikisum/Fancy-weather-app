@@ -1,6 +1,12 @@
 body {
-    background: linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed;
+    /* background: linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed; */
     color: white !important;
+    height: 100vh;
+    /* background-size: cover; */
+   font-size: 2rem;
+}
+.container {
+    max-width: 1440px !important;
 }
 
 .form-control {
@@ -62,7 +68,7 @@ body {
 }
 
 .weather-temperature {
-    font-size: 15rem;
+    font-size: 13rem;
 }
 
 .card {
