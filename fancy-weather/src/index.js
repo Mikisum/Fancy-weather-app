@@ -140,9 +140,15 @@ const name = document.getElementById('name');
 const weatherForDay1 = document.getElementById('weatherForDay1');
 const weatherForDay2 = document.getElementById('weatherForDay2');
 const weatherForDay3 = document.getElementById('weatherForDay3');
+const currentWeatherIcon = document.getElementById('weather-icon');
+const weatherIcon1 = document.getElementById('weather-icon1');
+const weatherIcon2 = document.getElementById('weather-icon2');
+const weatherIcon3 = document.getElementById('weather-icon3');
 
 function setWeatherData(data) {
     currentTemperature.innerText = `${data.current.temp_c}°`;
+    console.log(data.current.condition.icon);
+    currentWeatherIcon.src = data.current.condition.icon;
     weatherText.innerText = data.current.condition.text;
     weatherText.setAttribute('data', data.current.condition.text);
     feelslike.innerText = `Feels Like: ${Math.round(data.current.feelslike_c)}°`;
@@ -153,11 +159,14 @@ function setWeatherData(data) {
     country.innerText = data.location.country;
     weatherForDay1.innerText = `${data.forecast.forecastday[1].day.avgtemp_c}°`;
     weatherForDay2.innerText = `${data.forecast.forecastday[2].day.avgtemp_c}°`;
+    weatherIcon1.src = data.forecast.forecastday[1].day.condition.icon;
+    weatherIcon2.src = data.forecast.forecastday[2].day.condition.icon;
     updatePosition(data.location.lat, data.location.lon);
 }
 
 function setWeatherForThirdDay(data) {
     weatherForDay3.innerText = `${data.forecast.forecastday[0].day.avgtemp_c}°`;
+    weatherIcon3.src = data.forecast.forecastday[0].day.condition.icon;
 }
 
 function getWeatherData(value) {
@@ -167,6 +176,7 @@ function getWeatherData(value) {
         .then((res) => res.json())
         .then((data) => {
             console.log(data);
+            
             setWeatherData(data);
         })    
 }
@@ -179,7 +189,6 @@ function getWeatherForThirdDay(value) {
     return fetch(weatherTherdDay)
         .then((res) => res.json())
         .then((data) => {
-            // console.log(data);
             setWeatherForThirdDay(data)
         })    
 }
