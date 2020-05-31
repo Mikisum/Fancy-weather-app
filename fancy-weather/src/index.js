@@ -276,7 +276,7 @@ function setWeatherForThirdDay(data) {
 }
 
 function getWeatherData(value) {
-  const weatherDaysUrl = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${value}&days=3`;
+  const weatherDaysUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${value}&days=3`;
   // console.log(weatherDaysUrl);
   return fetch(weatherDaysUrl)
     .then((res) => res.json())
@@ -289,7 +289,7 @@ function getWeatherData(value) {
 function getWeatherForThirdDay(value) {
   const today = new Date();
   const thirdDay = (new Date(today.setDate(today.getDate() + 3))).toISOString().slice(0, 10);
-  const weatherTherdDay = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${value}&dt=${thirdDay}`;
+  const weatherTherdDay = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${value}&dt=${thirdDay}`;
   return fetch(weatherTherdDay)
     .then((res) => res.json())
     .then((data) => {
