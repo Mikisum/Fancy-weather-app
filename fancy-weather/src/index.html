@@ -21,13 +21,11 @@
                     <i class="fas fa-sync"></i>
                 </button> 
                 <div class="btn-group" role="group">
-                    <button id="languageButton" type="button" class="btn dropdown-toggle mb-0" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                        En
-                    </button>
+                    <button id="languageButton" type="button" class="btn dropdown-toggle mb-0" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">EN</button>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-lef" aria-labelledby="btnGroupDrop1">
-                        <button class="dropdown-item active" type="button">En</button>
-                        <button class="dropdown-item" type="button">Ru</button>
-                        <button class="dropdown-item" type="button">Be</button>
+                        <button class="dropdown-item active" type="button">EN</button>
+                        <button class="dropdown-item" type="button">RU</button>
+                        <button class="dropdown-item" type="button">BE</button>
                     </div>
                 </div>
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -53,28 +51,28 @@
         <div class="row p-5">
             <div class="weather col-md-8">
                 <div class="weather-location">
-                  <span data-i18n="name" id="name" class="name">Minsk</span>
+                  <span id="name" class="location"></span>
                   <div>
-                    <span data-i18n="city" id="region" class="city">Minsk</span>   
-                    <span data-i18n="country" id="country" class="republic">Belarus</span>  
+                    <span id="region" class="location"></span>   
+                    <span id="country" class="location"></span>  
                   </div>   
                   
                 </div>  
                 <div id="date"></div>  
-                <div data-i18n class="weather-time" id="time"></div>
+                <div class="weather-time" id="time"></div>
                 <div class="row pb-5">
                         <div class="col-sm-5 weather-temperature temperature" id="temperature"></div>
                         <div class="col weather-data">
                             <img class="wheather-icon" id="weather-icon" width="200" height="200" alt="weather_icon"></img>
-                            <p id="text" class="m-0"></p>
-                            <p id="feelslike" class="m-0 temperature"></p>
-                            <p id="wind" class="m-0"></p>
-                            <p id="humidity" class="m-0"></p>
+                            <p data-i18n id="text" class="m-0"></p>
+                            <p data-i18n id="feelslike" class="m-0 temperature"></p>
+                            <p data-i18n id="wind" class="m-0"></p>
+                            <p data-i18n id="humidity" class="m-0"></p>
                         </div>
                 </div>  
                 <div class="card-group">
                     <div class="card forecast">
-                        <h5 data-i18n="day" class="card-title forecast_day" id="day1"></h5>
+                        <h5 data-i18n class="card-title forecast_day" id="day1"></h5>
                         <div class="d-inline-flex">
                             <p class="card-text temperature" id="weatherForDay1"></p>
                             <img id="weather-icon1" class="forecast_icon" alt="weather_icon">
@@ -99,8 +97,8 @@
             </div>
             <div class="map col-md-4">
                <div id="map"></div>
-               <p id="latitude"></p>
-              <p id="longitude"></p> 
+               <p data-i18n id="latitude"></p>
+              <p data-i18n id="longitude"></p> 
             </div> 
                    
         </div>
@@ -109,5 +107,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.16.0/js/mdb.min.js"></script>
+    <script src='https://unpkg.com/@turf/turf/turf.min.js'></script>
 </body>
 </html>

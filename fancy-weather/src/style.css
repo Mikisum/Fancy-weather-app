@@ -3,7 +3,8 @@ body {
     color: white !important;
     height: 100vh;
     /* background-size: cover; */
-   font-size: 2rem;
+   font-size: 1.5rem;
+   transition: top 1s ease-out 0.5s;
 }
 .container {
     max-width: 1440px !important;
@@ -11,7 +12,6 @@ body {
 
 .form-control {
     width: 27.4rem;
-    height: 4.4rem;
     border: .1rem solid rgba(180,184,187,.7);
     border-radius: .5rem 0 0 .5rem;
     padding: 1.3rem 1.5rem;
@@ -25,6 +25,10 @@ body {
     /* background-color: transparent !important; */
     color: white !important;
     box-shadow: 0 0px 3px 0 white !important;
+}
+
+.active {
+    background-color: #a0a0a04a;
 }
 
 
@@ -79,6 +83,9 @@ background-color: transparent !important;
     font-size: 4rem;
 }
 
+
+/* #map { position: absolute; top: 0; bottom: 0; width: 100%; height: 80% !important;} */
+
 .map-container{
     overflow:hidden;
     padding-bottom:56.25%;
@@ -95,5 +102,5 @@ background-color: transparent !important;
 }
 
 .mapboxgl-map {
-    height: 80% !important;
+    height: 90% !important;
 }
