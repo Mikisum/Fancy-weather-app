@@ -62,44 +62,36 @@
                 </div>  
                 <div id="date"></div>  
                 <div data-i18n class="weather-time" id="time"></div>
-                <div class="row">
-                    <div class="col-sm-8 d-inline-flex">
-                        <div class="row">
-                            <div class="col weather-temperature temperature" id="temperature"></div>
-                            <div class="col weather-data">
-                                <p id="text"></p>
-                                <p id="feelslike" class="temperature"></p>
-                                <p id="wind"></p>
-                                <p id="humidity"></p>
-                            </div>
+                <div class="row pb-5">
+                        <div class="col-sm-5 weather-temperature temperature" id="temperature"></div>
+                        <div class="col weather-data">
+                            <img class="wheather-icon" id="weather-icon" width="200" height="200" alt="weather_icon"></img>
+                            <p id="text" class="m-0"></p>
+                            <p id="feelslike" class="m-0 temperature"></p>
+                            <p id="wind" class="m-0"></p>
+                            <p id="humidity" class="m-0"></p>
                         </div>
-                        
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="wheather-icon"></div>
-                        <div class="wheather-data"></div>
-                    </div>
-                </div>
+                </div>  
                 <div class="card-group">
                     <div class="card forecast">
                         <h5 data-i18n="day" class="card-title forecast_day" id="day1"></h5>
                         <div class="d-inline-flex">
                             <p class="card-text temperature" id="weatherForDay1"></p>
-                            <!-- <img class="forecast_icon" src="" alt=""> -->
+                            <img id="weather-icon1" class="forecast_icon" alt="weather_icon">
                         </div>
                     </div>
                     <div class="card forecast">
                         <h5 data-i18n class="card-title forecast_day" id="day2"></h5>
                         <div class="d-inline-flex">
                             <p class="card-text temperature" id="weatherForDay2"></p>
-                            <!-- <img class="forecast_icon" src="" alt=""> -->
+                            <img id="weather-icon2" class="forecast_icon" alt="weather_icon">
                         </div>
                     </div>
                     <div class="card forecast">
                         <h5 data-i18n class="card-title forecast_day" id="day3"></h5>
                         <div class="d-inline-flex">
                             <p class="card-text temperature" id="weatherForDay3"></p>
-                            <!-- <img class="forecast_icon" src="" alt=""> -->
+                            <img id="weather-icon3" class="forecast_icon" alt="weather_icon">
                         </div>
                     </div>
                     
