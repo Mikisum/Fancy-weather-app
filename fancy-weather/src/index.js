@@ -72,77 +72,29 @@ const languages = {
   BE: 'be.json',
 };
 
+
 let backgroudImages = [];
-
-window.addEventListener('load', () => {
-  getImages()
-    .then((res) => res.json())
-    .then((data) => {
-      backgroudImages = data.photos.photo;
-      updateBackground();
-    });
-  updateDate();
-  setInterval(updateTime, 1000);
-  getPosition(updateWeather);
-});
-
-const latitudeHtml = document.getElementById('latitude');
-const longitudeHtml = document.getElementById('longitude');
-
-function updatePosition(latitude, longitude) {
-  latitudeHtml.innerText = `Latitude: ${getDMS(latitude, 'lat')}`;
-  latitudeHtml.setAttribute('data-i18n', latitudeHtml.innerText);
-  longitudeHtml.innerText = `Longitude: ${getDMS(longitude, 'long')}`;
-  longitudeHtml.setAttribute('data-i18n', longitudeHtml.innerText);
-  map.flyTo({ center: [longitude, latitude] });
-}
-
-function updateWeather(location) {
-  return getWeatherData(location)
-    .then(getWeatherForThirdDay(location));
-}
-
 function updateBackground() {
   const random = Math.round(Math.random() * backgroudImages.length);
   const imageUrl = backgroudImages[random].url_h;
-  document.body.style.background = `linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed, url(\'${imageUrl}\') center center no-repeat fixed`;
+  document.body.style.background = `linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed, url('${imageUrl}') center center no-repeat fixed`;
   document.body.style.backgroundSize = 'cover';
 }
 
-function getPosition(callback) {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude } = position.coords;
-      const { longitude } = position.coords;
-      callback(`${latitude}, ${longitude}`)
-        .then(() => {
-          const language = sessionStorage.getItem('language');
-          if (language) {
-            if (currentLanguage !== language) {
-              translate(language)
-                .then(() => {
-                  currentLanguage = language;
-                  changeLanguageButton.textContent = language;
-                });
-            }
-          }
-        });
-    });
-  }
-}
 
 const apiKeyFlikr = '2f8ea488a21e4fac07f04c7fffc9898d';
 function getImages() {
   const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKeyFlikr}&tags=nature,spring,morning&tag_mode=all&extras=url_h&format=json&nojsoncallback=1`;
   return fetch(url);
 }
-
+let currentLanguage = changeLanguageButton.textContent;
 const translateKey = 'trnsl.1.1.20200507T084819Z.f390e50612a690db.7c1617d6408fa233a30cc9ef9d5f1a43827ff027';
 function getYandexTranslate(inputText, language) {
   const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${translateKey}&text=${inputText}&lang=${currentLanguage.toLowerCase()}-${language.toLowerCase()}`;
   return fetch(url).then((res) => res.json());
 }
 
+const day = document.getElementById('date');
 function translate(lang) {
   return fetch(`languages/${languages[lang]}`)
     .then((res) => res.json())
@@ -181,37 +133,27 @@ function translate(lang) {
     });
 }
 
-let currentLanguage = changeLanguageButton.textContent;
-document.addEventListener('click', (event) => {
-  if (event.target.closest('.dropdown-item')) {
-    languageButton.forEach((el) => el.classList.remove('active'));
-    event.target.classList.add('active');
-    translate(event.target.textContent)
-      .then(() => {
-        currentLanguage = event.target.textContent;
-        sessionStorage.setItem('language', currentLanguage);
-      });
-    changeLanguageButton.textContent = event.target.textContent;
-  } else if (event.target.id === 'buttonSearch') {
-    event.preventDefault();
-    updateWeather(searchInput.value);
-    updateBackground();
-  } else if (event.target.id === 'syncButton') {
-    updateBackground();
-  } else if (event.target.id === 'CelToFar') {
-    temperatureConverter('F');
-  } else if (event.target.id === 'FarToCel') {
-    temperatureConverter('C');
+function getPosition(callback) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude } = position.coords;
+      const { longitude } = position.coords;
+      callback(`${latitude}, ${longitude}`)
+        .then(() => {
+          const language = sessionStorage.getItem('language');
+          if (language) {
+            if (currentLanguage !== language) {
+              translate(language)
+                .then(() => {
+                  currentLanguage = language;
+                  changeLanguageButton.textContent = language;
+                });
+            }
+          }
+        });
+    });
   }
-});
-const searchForm = document.getElementById('searchForm');
-searchForm.addEventListener('keypress', (event) => {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    updateWeather(searchInput.value);
-    updateBackground();
-  }
-});
+}
 
 let temperatureUnits = 'C';
 const temperatureElements = document.getElementsByClassName('temperature');
@@ -228,6 +170,60 @@ function temperatureConverter(units) {
     });
     temperatureUnits = units;
   }
+}
+
+function truncate(n) {
+  return n > 0 ? Math.floor(n) : Math.ceil(n);
+}
+
+function getDMS(dd, longOrLat) {
+  let hemisphere;
+  if (/^[WE]|(?:lon)/i.test(longOrLat)) {
+    if (dd < 0) {
+      if (hemisphere === 'W') {
+        hemisphere = 'E';
+      }
+    } else if (dd < 0) {
+      if (hemisphere === 'S') {
+        hemisphere = 'N';
+      }
+    }
+  }
+  const absDD = Math.abs(dd);
+  const degrees = truncate(absDD);
+  const minutes = truncate((absDD - degrees) * 60);
+  const seconds = ((absDD - degrees - minutes / 60) * 60 ** 2).toFixed(2);
+
+  const dmsArray = [degrees, minutes, seconds, hemisphere];
+  return `${dmsArray[0]}°${dmsArray[1]}'${dmsArray[2]}" ${dmsArray[3]}`;
+}
+
+// const getDMS = function (dd, longOrLat) {
+//   const hemisphere = /^[WE]|(?:lon)/i.test(longOrLat)
+//     ? dd < 0
+//       ? 'W'
+//       : 'E'
+//     : dd < 0
+//       ? 'S'
+//       : 'N';
+
+//   const absDD = Math.abs(dd);
+//   const degrees = truncate(absDD);
+//   const minutes = truncate((absDD - degrees) * 60);
+//   const seconds = ((absDD - degrees - minutes / 60) * 60 ** 2).toFixed(2);
+
+//   const dmsArray = [degrees, minutes, seconds, hemisphere];
+//   return `${dmsArray[0]}°${dmsArray[1]}'${dmsArray[2]}" ${dmsArray[3]}`;
+// };
+const latitudeHtml = document.getElementById('latitude');
+const longitudeHtml = document.getElementById('longitude');
+
+function updatePosition(latitude, longitude) {
+  latitudeHtml.innerText = `Latitude: ${getDMS(latitude, 'lat')}`;
+  latitudeHtml.setAttribute('data-i18n', latitudeHtml.innerText);
+  longitudeHtml.innerText = `Longitude: ${getDMS(longitude, 'long')}`;
+  longitudeHtml.setAttribute('data-i18n', longitudeHtml.innerText);
+  map.flyTo({ center: [longitude, latitude] });
 }
 const apiKey = 'd9cbddc7739840c4bd5122238202605';
 
@@ -256,7 +252,7 @@ function setWeatherData(data) {
   weatherText.setAttribute('data-i18n', `weather.${weatherText.innerText}`);
   feelslike.innerText = `Feelslike: ${Math.round(data.current.feelslike_c)}°`;
   feelslike.setAttribute('data-i18n', feelslike.innerText);
-  wind.innerText = `Wind: ${Math.round(data.current.wind_kph * 1000 / 60 / 60)} m/s`;
+  wind.innerText = `Wind: ${Math.round((data.current.wind_kph * 1000) / 60 / 60)} m/s`;
   wind.setAttribute('data-i18n', wind.innerText);
   humidity.innerText = `Humidity: ${data.current.humidity}%`;
   humidity.setAttribute('data-i18n', humidity.innerText);
@@ -285,7 +281,6 @@ function getWeatherData(value) {
     });
 }
 
-
 function getWeatherForThirdDay(value) {
   const today = new Date();
   const thirdDay = (new Date(today.setDate(today.getDate() + 3))).toISOString().slice(0, 10);
@@ -297,30 +292,12 @@ function getWeatherForThirdDay(value) {
     });
 }
 
-function truncate(n) {
-  return n > 0 ? Math.floor(n) : Math.ceil(n);
+function updateWeather(location) {
+  return getWeatherData(location)
+    .then(getWeatherForThirdDay(location));
 }
 
-let getDMS = function (dd, longOrLat) {
-  const hemisphere = /^[WE]|(?:lon)/i.test(longOrLat)
-    ? dd < 0
-      ? 'W'
-      : 'E'
-    : dd < 0
-      ? 'S'
-      : 'N';
-
-  const absDD = Math.abs(dd);
-  const degrees = truncate(absDD);
-  const minutes = truncate((absDD - degrees) * 60);
-  const seconds = ((absDD - degrees - minutes / 60) * Math.pow(60, 2)).toFixed(2);
-
-  const dmsArray = [degrees, minutes, seconds, hemisphere];
-  return `${dmsArray[0]}°${dmsArray[1]}'${dmsArray[2]}" ${dmsArray[3]}`;
-};
-
 const time = document.getElementById('time');
-const day = document.getElementById('date');
 
 const day1 = document.getElementById('day1');
 const day2 = document.getElementById('day2');
@@ -341,6 +318,7 @@ function updateDate() {
   day3.setAttribute('data-i18n', `days.${day3.innerText}`);
 }
 
+
 function updateTime() {
   const today = new Date();
   const hours = today.getHours();
@@ -349,3 +327,48 @@ function updateTime() {
   const currentTime = `${hours}:${minutes}:${seconds}`;
   time.innerText = currentTime;
 }
+
+const searchForm = document.getElementById('searchForm');
+searchForm.addEventListener('keypress', (event) => {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    updateWeather(searchInput.value);
+    updateBackground();
+  }
+});
+
+window.addEventListener('load', () => {
+  getImages()
+    .then((res) => res.json())
+    .then((data) => {
+      backgroudImages = data.photos.photo;
+      updateBackground();
+    });
+  updateDate();
+  setInterval(updateTime, 1000);
+  getPosition(updateWeather);
+});
+
+
+document.addEventListener('click', (event) => {
+  if (event.target.closest('.dropdown-item')) {
+    languageButton.forEach((el) => el.classList.remove('active'));
+    event.target.classList.add('active');
+    translate(event.target.textContent)
+      .then(() => {
+        currentLanguage = event.target.textContent;
+        sessionStorage.setItem('language', currentLanguage);
+      });
+    changeLanguageButton.textContent = event.target.textContent;
+  } else if (event.target.id === 'buttonSearch') {
+    event.preventDefault();
+    updateWeather(searchInput.value);
+    updateBackground();
+  } else if (event.target.id === 'syncButton') {
+    updateBackground();
+  } else if (event.target.id === 'CelToFar') {
+    temperatureConverter('F');
+  } else if (event.target.id === 'FarToCel') {
+    temperatureConverter('C');
+  }
+});
