@@ -1,106 +1,95 @@
 body {
-    /* background: linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed; */
-    color: white !important;
-    height: 100vh;
-    /* background-size: cover; */
-   font-size: 1.5rem;
-   transition: top 1s ease-out 0.5s;
+  color: white !important;
+  height: 100vh;
+  font-size: 1.5rem;
+  transition: top 1s ease-out 0.5s;
 }
+
 .container {
-    max-width: 1440px !important;
+  max-width: 1440px !important;
 }
 
 .form-control {
-    width: 27.4rem;
-    border: .1rem solid rgba(180,184,187,.7);
-    border-radius: .5rem 0 0 .5rem;
-    padding: 1.3rem 1.5rem;
-    background-color: transparent !important;
-    font-family: inherit;
-    font-size: 1.4rem;
-    color: #fff !important;
+  width: 27.4rem;
+  border: .1rem solid rgba(180,184,187,.7);
+  border-radius: .5rem 0 0 .5rem;
+  padding: 1.3rem 1.5rem;
+  background-color: transparent !important;
+  font-family: inherit;
+  font-size: 1.4rem;
+  color: #fff !important;
 }
+
 .btn {
-    padding: 5px 20px !important;
-    /* background-color: transparent !important; */
-    color: white !important;
-    box-shadow: 0 0px 3px 0 white !important;
+  padding: 5px 20px !important;
+  color: white !important;
+  box-shadow: 0 0px 3px 0 white !important;
 }
 
 .active {
-    background-color: #a0a0a04a;
+  background-color: #a0a0a04a;
 }
 
-
-/* .btn-microphone {
-    position: absolute;
-    right: 3rem;
-    border: 0 !important;
-    margin: 0 !important;
-} */
-
 .microphone {
-    width: 2rem;
-    height: 2rem;
-    position: absolute;
-    right: 4rem;
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  right: 4rem;
 }
 
 .fa-microphone {
-    top: 0.7rem !important;
-    right: 0.5rem !important;
-    position: absolute;
+  top: 0.7rem !important;
+  right: 0.5rem !important;
+  position: absolute;
 }
 
 .input-group-text {
-    background-color: transparent !important;
+  background-color: transparent !important;
 }
 
 .fa-microphone {
-    color: white;
+  color: white;
 }
 
 .weather-location {
-    font-size: 3rem;
-    font-weight: 700 !important;
+  font-size: 3rem;
+  font-weight: 700 !important;
 }
 
 .weather-time {
-    font-size: 2.2rem;
-    text-transform: capitalize;
-    font-weight: 400;
+  font-size: 2.2rem;
+  text-transform: capitalize;
+  font-weight: 400;
 }
 
 .weather-temperature {
-    font-size: 13rem;
+  font-size: 13rem;
 }
 
 .card {
-background-color: transparent !important;
+  background-color: transparent !important;
 }
 
 .forecast_temperature {
-    font-size: 4rem;
+  font-size: 4rem;
 }
-
-
-/* #map { position: absolute; top: 0; bottom: 0; width: 100%; height: 80% !important;} */
 
 .map-container{
-    overflow:hidden;
-    padding-bottom:56.25%;
-    position:relative;
-    min-height:350px;
-    border-radius: 10%;
+  overflow:hidden;
+  padding-bottom:56.25%;
+  position:relative;
+  min-height:350px;
+  border-radius: 10%;
 }
+
 .map-container iframe{
-    left:0;
-    top:0;
-    height:100%;
-    width:100%;
-    position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:100%;
+  position:absolute;
 }
 
 .mapboxgl-map {
-    height: 85% !important;
+  height: 85% !important;
 }
