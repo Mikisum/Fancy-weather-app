@@ -123,24 +123,24 @@ function updatePosition(latitude, longitude) {
 }
 
 function setWeatherData(data) {
-  domElements.currentTemperature.innerText = `${data.current.temp_c}°`;
+  domElements.currentTemperature.innerText = `${Math.round(data.current.temp_c)}°`;
   domElements.currentWeatherIcon.src = data.current.condition.icon;
-  domElements.weatherText.setAttribute('data-i18n', `weather.${data.current.condition.text}`);
+  domElements.weatherText.setAttribute('data-i18n', `weather.${Math.round(data.current.condition.text)}`);
   domElements.feelslike.setAttribute('data-i18n', `Feelslike: ${Math.round(data.current.feelslike_c)}°`);
   domElements.wind.setAttribute('data-i18n', `Wind: ${Math.round((data.current.wind_kph * 1000) / 60 / 60)} m/s`);
   domElements.humidity.setAttribute('data-i18n', `Humidity: ${data.current.humidity}%`);
   domElements.name.setAttribute('data', data.location.name);
   domElements.region.setAttribute('data', data.location.region);
   domElements.country.setAttribute('data', data.location.country);
-  domElements.weatherForDay1.innerText = `${data.forecast.forecastday[1].day.avgtemp_c}°`;
-  domElements.weatherForDay2.innerText = `${data.forecast.forecastday[2].day.avgtemp_c}°`;
+  domElements.weatherForDay1.innerText = `${Math.round(data.forecast.forecastday[1].day.avgtemp_c)}°`;
+  domElements.weatherForDay2.innerText = `${Math.round(data.forecast.forecastday[2].day.avgtemp_c)}°`;
   domElements.weatherIcon1.src = data.forecast.forecastday[1].day.condition.icon;
   domElements.weatherIcon2.src = data.forecast.forecastday[2].day.condition.icon;
   updatePosition(data.location.lat, data.location.lon);
 }
 
 function setWeatherForThirdDay(data) {
-  domElements.weatherForDay3.innerText = `${data.forecast.forecastday[0].day.avgtemp_c}°`;
+  domElements.weatherForDay3.innerText = `${Math.round(data.forecast.forecastday[0].day.avgtemp_c)}°`;
   domElements.weatherIcon3.src = data.forecast.forecastday[0].day.condition.icon;
 }
 
