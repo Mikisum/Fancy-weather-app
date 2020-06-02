@@ -147,7 +147,8 @@ const config = {
       filename: './index.html'
     }),
     new CopyWebpackPlugin([
-      { from: 'src/languages', to: 'languages' }
+      { from: 'src/languages', to: 'languages' },
+      { from: 'src/images', to: 'images' }
     ]),
   ],
 

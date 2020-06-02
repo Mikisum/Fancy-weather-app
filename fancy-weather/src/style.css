@@ -74,10 +74,14 @@ body {
   font-size: 4rem;
 }
 
+.mapboxgl-control-container {
+  display: none;
+}
+
 .map {
   width: 512px;
   height: 512px;
-  mask-image: url(/src/images/mask.svg);
+  mask-image: url(./images/mask.svg);
   background-size: cover;
   mask-size: cover;
   background-position: center;
