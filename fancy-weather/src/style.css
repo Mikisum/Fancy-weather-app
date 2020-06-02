@@ -74,22 +74,15 @@ body {
   font-size: 4rem;
 }
 
-.map-container{
-  overflow:hidden;
-  padding-bottom:56.25%;
-  position:relative;
-  min-height:350px;
-  border-radius: 10%;
-}
-
-.map-container iframe{
-  left:0;
-  top:0;
-  height:100%;
-  width:100%;
-  position:absolute;
-}
-
-.mapboxgl-map {
-  height: 85% !important;
+.map {
+  width: 512px;
+  height: 512px;
+  mask-image: url(/src/images/mask.svg);
+  background-size: cover;
+  mask-size: cover;
+  background-position: center;
+  mask-position: center right;
+  background-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  mask-clip: padding-box;
 }
