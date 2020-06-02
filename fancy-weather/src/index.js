@@ -125,7 +125,7 @@ function updatePosition(latitude, longitude) {
 function setWeatherData(data) {
   domElements.currentTemperature.innerText = `${Math.round(data.current.temp_c)}°`;
   domElements.currentWeatherIcon.src = data.current.condition.icon;
-  domElements.weatherText.setAttribute('data-i18n', `weather.${Math.round(data.current.condition.text)}`);
+  domElements.weatherText.setAttribute('data-i18n', `weather.${data.current.condition.text}`);
   domElements.feelslike.setAttribute('data-i18n', `Feelslike: ${Math.round(data.current.feelslike_c)}°`);
   domElements.wind.setAttribute('data-i18n', `Wind: ${Math.round((data.current.wind_kph * 1000) / 60 / 60)} m/s`);
   domElements.humidity.setAttribute('data-i18n', `Humidity: ${data.current.humidity}%`);
@@ -152,7 +152,6 @@ function getWeatherData(value) {
       if (data.error) {
         throw data.error;
       }
-      console.log(data);
       setWeatherData(data);
     });
 }
@@ -223,6 +222,26 @@ function indetifyLanguage() {
     currentLanguage = navigator.languages[1].toUpperCase();
   }
 }
+const microphone = document.getElementById('microphone');
+let recognizer = new webkitSpeechRecognition();
+recognizer.interimResults = true;
+recognizer.onresult = function (event) {
+  if (currentLanguage === 'RU') {
+    recognizer.lang = 'ru-RU';
+  } else {
+    recognizer.lang = 'en-US';
+  }
+  let result = event.results[event.resultIndex];
+  if (result.isFinal) {
+    console.log(result[0].transcript);
+    searchInput.value = result[0].transcript;
+    updateWeather(domElements.searchInput.value);
+    updateBackground();
+  }
+};
+function speach() {
+  recognizer.start();
+}
 
 window.addEventListener('load', () => {
   getImages()
@@ -252,5 +271,8 @@ document.addEventListener('click', (event) => {
     temperatureConverter('F');
   } else if (event.target.id === 'FarToCel') {
     temperatureConverter('C');
+  } else if (event.target.closest('#microphone')) {
+    event.preventDefault();
+    speach(); 
   }
 });

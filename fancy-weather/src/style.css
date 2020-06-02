@@ -30,25 +30,15 @@ body {
   background-color: #a0a0a04a;
 }
 
-.microphone {
-  width: 2rem;
-  height: 2rem;
-  position: absolute;
-  right: 4rem;
-}
-
-.fa-microphone {
+/* .fa-microphone {
   top: 0.7rem !important;
   right: 0.5rem !important;
   position: absolute;
-}
+  color: white;
+} */
 
 .input-group-text {
   background-color: transparent !important;
-}
-
-.fa-microphone {
-  color: white;
 }
 
 .weather-location {
