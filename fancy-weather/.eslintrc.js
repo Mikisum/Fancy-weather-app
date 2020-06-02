@@ -13,8 +13,9 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
-        // "no-use-before-define": ["error", { "functions": true, "classes": true }],
-        // "no-use-before-define": ["error", { "variables": false }],
-        // "eslint no-use-before-define": ["error", { "functions": false }]
+        "error": {
+            "props": true,
+            "ignorePropertyModificationsFor": ["element"],
+        }
     }
 };
