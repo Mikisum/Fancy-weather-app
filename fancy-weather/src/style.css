@@ -30,12 +30,23 @@ body {
   background-color: #a0a0a04a;
 }
 
-/* .fa-microphone {
-  top: 0.7rem !important;
-  right: 0.5rem !important;
-  position: absolute;
-  color: white;
-} */
+.microphone-active {
+  position: relative;
+  border: none;
+  box-shadow: 0 0 0 0 rgba(255, 81, 65, 0.7);
+  border-radius: 50%;
+  background-color: #e84c3d;
+  cursor: pointer;
+  -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  -ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  transition: all ease-out 0.2s;
+}
+@-webkit-keyframes pulse {to {box-shadow: 0 0 0 15px rgba(221, 73, 59, 0);}}
+@-moz-keyframes pulse {to {box-shadow: 0 0 0 15px rgba(232, 76, 61, 0);}}
+@-ms-keyframes pulse {to {box-shadow: 0 0 0 15px rgba(232, 76, 61, 0);}}
+@keyframes pulse {to {box-shadow: 0 0 0 15px rgba(232, 76, 61, 0);}}
 
 .input-group-text {
   background-color: transparent !important;

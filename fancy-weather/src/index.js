@@ -222,7 +222,7 @@ function indetifyLanguage() {
     currentLanguage = navigator.languages[1].toUpperCase();
   }
 }
-const microphone = document.getElementById('microphone');
+
 let recognizer = new webkitSpeechRecognition();
 recognizer.interimResults = true;
 recognizer.onresult = function (event) {
@@ -233,14 +233,23 @@ recognizer.onresult = function (event) {
   }
   let result = event.results[event.resultIndex];
   if (result.isFinal) {
-    console.log(result[0].transcript);
+    speachStop();
     searchInput.value = result[0].transcript;
     updateWeather(domElements.searchInput.value);
     updateBackground();
   }
 };
-function speach() {
+let isSpeachStarted = false;
+function speachStart() {
+  isSpeachStarted =true;
+  domElements.microphone.classList.add('microphone-active');
   recognizer.start();
+}
+
+function speachStop() {
+  isSpeachStarted = false;
+  recognizer.stop();
+  domElements.microphone.classList.remove('microphone-active'); 
 }
 
 window.addEventListener('load', () => {
@@ -271,8 +280,12 @@ document.addEventListener('click', (event) => {
     temperatureConverter('F');
   } else if (event.target.id === 'FarToCel') {
     temperatureConverter('C');
-  } else if (event.target.closest('#microphone')) {
+  } else if (event.target.closest('.microphone')) {
     event.preventDefault();
-    speach(); 
+    if (!isSpeachStarted) {
+      speachStart();
+    } else {
+      speachStop();
+    }
   }
 });
