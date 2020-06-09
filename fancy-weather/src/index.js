@@ -13,6 +13,7 @@ const map = new mapboxgl.Map({
   style: 'mapbox://styles/mapbox/streets-v11',
   zoom: 11,
 });
+map.addControl(new mapboxgl.NavigationControl());
 
 const languages = {
   EN: 'en.json',
@@ -136,12 +137,16 @@ function getPosition(callback) {
     domElements.searchInput.textContent = 'Unable to retrieve your location';
   }
 }
-
+let marker;
 function updatePosition(latitude, longitude) {
   domElements.latitude.setAttribute('data-i18n', `Latitude: ${getDMS(latitude, 'lat')}`);
   domElements.longitude.setAttribute('data-i18n', `Longitude: ${getDMS(longitude, 'long')}`);
   map.flyTo({ center: [longitude, latitude] });
-  // const marker = new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
+  if (marker) {
+    marker.remove();
+  }
+  marker = new mapboxgl.Marker().setLngLat([longitude, latitude]);
+  marker.addTo(map);
 }
 
 let timezone;
