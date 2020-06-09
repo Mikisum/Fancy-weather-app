@@ -13,9 +13,8 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
-        "error": {
-            "props": true,
-            "ignorePropertyModificationsFor": ["element"],
-        }
+        'no-param-reassign': ['error', { props: true, ignorePropertyModificationsFor: ['element'] }],
+        "no-undef": ["error", { "typeof": true }],
+        "no-console": "off",
     }
 };
