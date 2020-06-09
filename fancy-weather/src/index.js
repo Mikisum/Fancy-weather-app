@@ -1,8 +1,9 @@
+
 import './style.css';
 import months from './months';
 import getDayName from './days';
 import domElements from './domElements';
-import {getDMS, temperatureConverter} from './converter';
+import { getDMS, temperatureConverter } from './converter';
 
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
@@ -20,23 +21,44 @@ const languages = {
 };
 
 const apiKey = {
-  image : '2f8ea488a21e4fac07f04c7fffc9898d',
+  image: '2f8ea488a21e4fac07f04c7fffc9898d',
   weather: 'd9cbddc7739840c4bd5122238202605',
-  translate: 'trnsl.1.1.20200507T084819Z.f390e50612a690db.7c1617d6408fa233a30cc9ef9d5f1a43827ff027'
-}
+  translate: 'trnsl.1.1.20200507T084819Z.f390e50612a690db.7c1617d6408fa233a30cc9ef9d5f1a43827ff027',
+};
+// function getImages(value) {
+//   const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey.image}&tags=nature,summer,${value},weather&tag_mode=all&extras=url_h&format=json&nojsoncallback=1`;
+//   return fetch(url);
+// }
 
-let backgroudImages = [];
-function updateBackground() {
-  const random = Math.round(Math.random() * backgroudImages.length);
-  const imageUrl = backgroudImages[random].url_h;
-  document.body.style.background = `linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed, url('${imageUrl}') center center no-repeat fixed`;
-  document.body.style.backgroundSize = 'cover';
-}
-
-function getImages() {
-  const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey.image}&tags=nature,summer,morning,weather&tag_mode=all&extras=url_h&format=json&nojsoncallback=1`;
+function getImages(weatherValue) {
+  const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey.image}&tags=nature,summer,${weatherValue},weather&tag_mode=all&extras=url_h&format=json&nojsoncallback=1`;
+  console.log(url);
   return fetch(url);
 }
+
+function updateBackground() {
+  const weatherValue = domElements.weatherText.getAttribute('data-i18n').slice(8);
+  getImages(weatherValue)
+    .then((res) => res.json())
+    .then((data) => {
+      const backgroudImages = data.photos.photo;
+      const random = Math.round(Math.random() * backgroudImages.length);
+      const imageUrl = backgroudImages[random].url_h;
+      const image = new Image();
+      image.onload = function bak() {
+        document.body.style.background = `linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed, url('${this.src}') center center no-repeat fixed`;
+        document.body.style.backgroundSize = 'cover';
+      };
+      image.src = imageUrl;
+    })
+    .catch((error) => {
+      console.log(error.message);
+      document.body.style.background = 'linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed, url(\'images/background.jpg\') center center no-repeat fixed';
+      document.body.style.backgroundSize = 'cover';
+    });
+}
+
+
 let currentLanguage = domElements.changeLanguageButton.textContent;
 
 function getYandexTranslate(inputText, language) {
@@ -44,24 +66,13 @@ function getYandexTranslate(inputText, language) {
   return fetch(url).then((res) => res.json());
 }
 
-function translate(lang) {
-  const p1 = translateI18n(lang);
-  const p2 = translateLocation(lang);
-  Promise.all([p1, p2])
-    .then(() => {
-      currentLanguage = lang;
-      domElements.changeLanguageButton.textContent = lang;
-      sessionStorage.setItem('language', currentLanguage);
-    });
-}
-
 function translateLocation(lang) {
-  let promises = [];
+  const promises = [];
   domElements.locationElements.forEach((element) => {
     const p = getYandexTranslate(element.getAttribute('data'), lang)
       .then((data) => {
         element.textContent = data.text;
-    });
+      });
     promises.push(p);
   });
   return Promise.all(promises);
@@ -100,6 +111,17 @@ function translateI18n(lang) {
     });
 }
 
+function translate(lang) {
+  const p1 = translateI18n(lang);
+  const p2 = translateLocation(lang);
+  Promise.all([p1, p2])
+    .then(() => {
+      currentLanguage = lang;
+      domElements.changeLanguageButton.textContent = lang;
+      sessionStorage.setItem('language', currentLanguage);
+    });
+}
+
 function getPosition(callback) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -107,9 +129,9 @@ function getPosition(callback) {
       const { longitude } = position.coords;
       callback(`${latitude}, ${longitude}`)
         .then(() => {
-
+          updateBackground();
         });
-    }, );
+    });
   } else {
     domElements.searchInput.textContent = 'Unable to retrieve your location';
   }
@@ -119,7 +141,14 @@ function updatePosition(latitude, longitude) {
   domElements.latitude.setAttribute('data-i18n', `Latitude: ${getDMS(latitude, 'lat')}`);
   domElements.longitude.setAttribute('data-i18n', `Longitude: ${getDMS(longitude, 'long')}`);
   map.flyTo({ center: [longitude, latitude] });
-  const marker = new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
+  // const marker = new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
+}
+
+let timezone;
+function calculateTimezone(localtime) {
+  const searchDate = new Date(localtime);
+  const localDate = new Date();
+  timezone = localDate.getUTCHours() - searchDate.getHours();
 }
 
 function setWeatherData(data) {
@@ -137,7 +166,10 @@ function setWeatherData(data) {
   domElements.weatherIcon1.src = data.forecast.forecastday[1].day.condition.icon;
   domElements.weatherIcon2.src = data.forecast.forecastday[2].day.condition.icon;
   updatePosition(data.location.lat, data.location.lon);
+  calculateTimezone(data.location.localtime);
+  console.log(data);
 }
+
 
 function setWeatherForThirdDay(data) {
   domElements.weatherForDay3.innerText = `${Math.round(data.forecast.forecastday[0].day.avgtemp_c)}°`;
@@ -197,7 +229,9 @@ function updateDate() {
 }
 
 function updateTime() {
-  const today = new Date();
+  const d = new Date();
+  const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  const today = new Date(utc - (3600000 * timezone));
   const hours = today.getHours();
   const minutes = today.getMinutes();
   const seconds = today.getSeconds();
@@ -217,31 +251,16 @@ function indetifyLanguage() {
   const storedLanguage = sessionStorage.getItem('language');
   if (storedLanguage) {
     currentLanguage = storedLanguage;
-  }
-  else {
+  } else {
     currentLanguage = navigator.languages[1].toUpperCase();
   }
 }
-
-let recognizer = new webkitSpeechRecognition();
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognizer = new SpeechRecognition();
 recognizer.interimResults = true;
-recognizer.onresult = function (event) {
-  if (currentLanguage === 'RU') {
-    recognizer.lang = 'ru-RU';
-  } else {
-    recognizer.lang = 'en-US';
-  }
-  let result = event.results[event.resultIndex];
-  if (result.isFinal) {
-    speachStop();
-    searchInput.value = result[0].transcript;
-    updateWeather(domElements.searchInput.value);
-    updateBackground();
-  }
-};
 let isSpeachStarted = false;
 function speachStart() {
-  isSpeachStarted =true;
+  isSpeachStarted = true;
   domElements.microphone.classList.add('microphone-active');
   recognizer.start();
 }
@@ -249,20 +268,28 @@ function speachStart() {
 function speachStop() {
   isSpeachStarted = false;
   recognizer.stop();
-  domElements.microphone.classList.remove('microphone-active'); 
+  domElements.microphone.classList.remove('microphone-active');
 }
+recognizer.onresult = function recognition(event) {
+  if (currentLanguage === 'RU') {
+    recognizer.lang = 'ru-RU';
+  } else {
+    recognizer.lang = 'en-US';
+  }
+  const result = event.results[event.resultIndex];
+  if (result.isFinal) {
+    speachStop();
+    domElements.searchInput.value = result[0].transcript;
+    updateWeather(domElements.searchInput.value);
+    updateBackground();
+  }
+};
 
 window.addEventListener('load', () => {
-  getImages()
-    .then((res) => res.json())
-    .then((data) => {
-      backgroudImages = data.photos.photo;
-      updateBackground();
-    });
+  getPosition(updateWeather);
   indetifyLanguage();
   updateDate();
   setInterval(updateTime, 1000);
-  getPosition(updateWeather);
 });
 
 document.addEventListener('click', (event) => {
