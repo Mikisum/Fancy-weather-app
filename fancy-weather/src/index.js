@@ -1,4 +1,3 @@
-
 import './style.css';
 import months from './months';
 import getDayName from './days';
@@ -21,30 +20,36 @@ const languages = {
   BE: 'be.json',
 };
 
+const timesOfDay = {
+  night: 'night',
+  day: 'day',
+};
+
 const apiKey = {
   image: '2f8ea488a21e4fac07f04c7fffc9898d',
   weather: 'd9cbddc7739840c4bd5122238202605',
   translate: 'trnsl.1.1.20200507T084819Z.f390e50612a690db.7c1617d6408fa233a30cc9ef9d5f1a43827ff027',
 };
-// function getImages(value) {
-//   const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey.image}&tags=nature,summer,${value},weather&tag_mode=all&extras=url_h&format=json&nojsoncallback=1`;
-//   return fetch(url);
-// }
 
-function getImages(weatherValue) {
-  const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey.image}&tags=nature,summer,${weatherValue},weather&tag_mode=all&extras=url_h&format=json&nojsoncallback=1`;
+function getImages(time) {
+  const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey.image}&tags=nature,summer,${time},weather&tag_mode=all&extras=url_h&format=json&nojsoncallback=1`;
   console.log(url);
   return fetch(url);
 }
 
+let isDay;
 function updateBackground() {
-  const weatherValue = domElements.weatherText.getAttribute('data-i18n').slice(8);
-  getImages(weatherValue)
+  const time = isDay === 1 ? timesOfDay.day : timesOfDay.night;
+  getImages(time)
     .then((res) => res.json())
     .then((data) => {
       const backgroudImages = data.photos.photo;
-      const random = Math.round(Math.random() * backgroudImages.length);
-      const imageUrl = backgroudImages[random].url_h;
+      let random = Math.ceil(Math.random() * backgroudImages.length);
+      let imageUrl = backgroudImages[random].url_h;
+      while (!imageUrl) {
+        random = Math.ceil(Math.random() * backgroudImages.length);
+        imageUrl = backgroudImages[random].url_h;
+      }
       const image = new Image();
       image.onload = function bak() {
         document.body.style.background = `linear-gradient(rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%) center center / cover fixed, url('${this.src}') center center no-repeat fixed`;
@@ -172,7 +177,7 @@ function setWeatherData(data) {
   domElements.weatherIcon2.src = data.forecast.forecastday[2].day.condition.icon;
   updatePosition(data.location.lat, data.location.lon);
   calculateTimezone(data.location.localtime);
-  console.log(data);
+  isDay = data.current.is_day;
 }
 
 
@@ -247,8 +252,8 @@ function updateTime() {
 domElements.searchForm.addEventListener('keypress', (event) => {
   if (event.keyCode === 13) {
     event.preventDefault();
-    updateWeather(domElements.searchInput.value);
-    updateBackground();
+    updateWeather(domElements.searchInput.value)
+      .then(() => updateBackground());
   }
 });
 
@@ -304,8 +309,8 @@ document.addEventListener('click', (event) => {
     translate(event.target.textContent);
   } else if (event.target.id === 'buttonSearch') {
     event.preventDefault();
-    updateWeather(domElements.searchInput.value);
-    updateBackground();
+    updateWeather(domElements.searchInput.value)
+      .then(() => updateBackground());
   } else if (event.target.id === 'syncButton') {
     updateBackground();
   } else if (event.target.id === 'CelToFar') {

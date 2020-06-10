@@ -28,7 +28,7 @@ const domElements = {
   day2: document.getElementById('day2'),
   day3: document.getElementById('day3'),
   searchForm: document.getElementById('searchForm'),
-  microphone: document.getElementById('microphone')
+  microphone: document.getElementById('microphone'),
 };
 
 export default domElements;
