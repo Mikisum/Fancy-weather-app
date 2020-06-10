@@ -160,13 +160,16 @@ function calculateTimezone(localtime) {
   const localDate = new Date();
   timezone = localDate.getUTCHours() - searchDate.getHours();
 }
+function convertWind(data) {
+  return Math.round((data.current.wind_kph * 1000) / 60 / 60);
+}
 
 function setWeatherData(data) {
   domElements.currentTemperature.innerText = `${Math.round(data.current.temp_c)}°`;
   domElements.currentWeatherIcon.src = data.current.condition.icon;
   domElements.weatherText.setAttribute('data-i18n', `weather.${data.current.condition.text}`);
   domElements.feelslike.setAttribute('data-i18n', `Feelslike: ${Math.round(data.current.feelslike_c)}°`);
-  domElements.wind.setAttribute('data-i18n', `Wind: ${Math.round((data.current.wind_kph * 1000) / 60 / 60)} m/s`);
+  domElements.wind.setAttribute('data-i18n', `Wind: ${convertWind(data)} m/s`);
   domElements.humidity.setAttribute('data-i18n', `Humidity: ${data.current.humidity}%`);
   domElements.name.setAttribute('data', data.location.name);
   domElements.region.setAttribute('data', data.location.region);
